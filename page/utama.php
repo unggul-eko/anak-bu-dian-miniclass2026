@@ -12,72 +12,149 @@
             font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
         }
+        
+        /* 💡 REVISI UTAMA: EFEK INTERAKTIF PADA 4 KOTAK UTAMA */
         .glass-card {
             background: rgba(255,255,255,0.92);
             backdrop-filter: blur(2px);
             border-radius: 2rem;
-            border: 1px solid rgba(80,100,70,0.2);
-            transition: transform 0.1s ease;
+            border: 1px solid rgba(80,100,70,0.15);
+            
+            /* Animasi transisi harus smooth saat kursor masuk dan keluar kotak */
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            will-change: transform, box-shadow;
         }
         
-        /* 8. Desain Timer Baru yang Lebih Menarik (Tidak kaku / tidak kelihatan template AI) */
-        .timer-container {
-            background: linear-gradient(135deg, #1e2a1a 0%, #111a10 100%);
-            border-radius: 2.5rem;
-            padding: 2.5rem 1.5rem;
-            box-shadow: inset 0 4px 15px rgba(0,0,0,0.5), 0 10px 25px rgba(44,94,42,0.2);
-            position: relative;
-            overflow: hidden;
+        /* Efek ketika kursor mengarah ke salah satu kotak (:hover) */
+        .glass-card:hover {
+            transform: scale(1.025); /* Efek zoom-in dikit (2.5% lebih besar) */
+            
+            /* Memberikan efek bayangan warna hijau lembut di belakang kotak */
+            box-shadow: 0 15px 30px rgba(31, 90, 46, 0.15), 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-color: rgba(46, 125, 50, 0.3); /* Bingkai ikut menggelap tipis */
         }
-        .timer-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(212,255,196,0.06) 0%, transparent 70%);
-            pointer-events: none;
+        
+        /* REVISI UTAMA TIMER ATAS: Tanpa BG Gelap, Tanpa Efek Neon, Angka Solid Bersih */
+        .timer-container {
+            background: transparent;
+            border-radius: 0;
+            padding: 1rem 0;
+            box-shadow: none;
+            position: relative;
         }
         .timer-digit {
             font-family: 'Fira Mono', monospace;
             font-size: 4.5rem;
             font-weight: 800;
-            letter-spacing: 2px;
-            color: #d4ffc4;
-            text-shadow: 0 0 15px rgba(212,255,196,0.6);
+            letter-spacing: 1px;
+            color: #1f5a2e; 
+            text-shadow: none; 
             display: block;
             line-height: 1;
             margin-bottom: 0.5rem;
         }
         .timer-progress-ring {
             height: 6px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(0, 0, 0, 0.08);
             border-radius: 10px;
             width: 80%;
-            margin: 1rem auto 0 auto;
+            margin: 1.2rem auto 0 auto;
             overflow: hidden;
         }
         .timer-progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #4caf50, #d4ffc4);
+            background: linear-gradient(90deg, #2e7d32, #4caf50);
             width: 100%;
             transition: width 1s linear;
         }
 
-        .session-chip {
-            background-color: #e9f5e3;
-            border-radius: 40px;
-            padding: 0.4rem 1rem;
-            font-weight: 600;
-            transition: 0.1s;
+        /* REVISI UTAMA PICKER BAWAH: Tanpa Kotak Hitam, Menggunakan BG Cerah Menyerupai Putih */
+        .wheel-picker-box {
+            background: transparent;
+            border-radius: 0;
+            padding: 0.5rem 0;
+            box-shadow: none;
+            color: #2c3e2f;
+        }
+        .wheel-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 160px;
+            background: #f4f9f3; 
+            border: 1px solid rgba(80, 100, 70, 0.15);
+            border-radius: 1.5rem;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .wheel-container::before, .wheel-container::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; height: 50px; z-index: 3;
+            pointer-events: none;
+        }
+        .wheel-container::before {
+            top: 0; background: linear-gradient(to bottom, #f4f9f3 15%, rgba(244, 249, 243, 0) 100%);
+        }
+        .wheel-container::after {
+            bottom: 0; background: linear-gradient(to top, #f4f9f3 15%, rgba(244, 249, 243, 0) 100%);
+        }
+        .wheel-selection-center {
+            position: absolute;
+            left: 4%; right: 4%; top: 60px; height: 40px;
+            border-top: 1px solid rgba(46, 125, 50, 0.2);
+            border-bottom: 1px solid rgba(46, 125, 50, 0.2);
+            background: rgba(46, 125, 50, 0.03);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .wheel-column {
+            flex: 1;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+            z-index: 2;
+            text-align: center;
+        }
+        .wheel-column::-webkit-scrollbar {
+            display: none;
+        }
+        .wheel-label-header {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #5d7e5a;
+            letter-spacing: 0.5px;
+        }
+        .wheel-spacer-top-bottom {
+            height: 60px;
+        }
+        .wheel-item {
+            height: 40px;
+            line-height: 40px;
+            font-family: 'Fira Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #a2bca0; 
+            scroll-snap-align: center;
+            transition: all 0.2s ease;
             cursor: pointer;
         }
-        .session-chip.active {
-            background-color: #2e7d32;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        .wheel-item.selected {
+            color: #1f5a2e; 
+            font-weight: 800;
+            font-size: 1.55rem;
+            transform: scale(1.05);
         }
+        .wheel-separator-dots {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #2e7d32;
+            padding-bottom: 4px;
+            user-select: none;
+        }
+
+        /* Komponen Pendukung Samping */
         .mode-switch {
             background: #e9ecef;
             border-radius: 60px;
@@ -108,7 +185,6 @@
             line-height: 1.2;
         }
         
-        /* 6. Style untuk Tugas Coret saat dicentang */
         .todo-item-custom {
             display: flex;
             align-items: center;
@@ -169,7 +245,6 @@
             color: white;
         }
         
-        /* Memo history area */
         .memo-log-item {
             font-size: 0.85rem;
             background: rgba(255,255,255,0.6);
@@ -204,14 +279,9 @@
         <div class="col-lg-6">
             <div class="glass-card p-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
-                    <h5 class="fw-bold"><i class="bi bi-cup-hot-fill me-2"></i>Sesi fokus</h5>
-                    <div class="d-flex gap-2" id="focusPresetGroup">
-                        <span data-minutes="25" class="session-chip active">25 mnt</span>
-                        <span data-minutes="35" class="session-chip">35 mnt</span>
-                        <span data-minutes="50" class="session-chip">50 mnt</span>
-                    </div>
+                    <h5 class="fw-bold m-0"><i class="bi bi-cup-hot-fill me-2"></i>Sesi produktif</h5>
                 </div>
-                <div class="d-flex justify-content-between mt-2 mb-3">
+                <div class="d-flex justify-content-between mt-3 mb-3">
                     <span><i class="bi bi-calendar-check"></i> Sesi #<span id="totalSessionsToday">0</span> hari ini</span>
                     <span class="streak-badge"><i class="bi bi-fire"></i> WEEKLY STREAK <span id="weeklyStreak">0</span> hari</span>
                 </div>
@@ -255,11 +325,39 @@
         <div class="col-lg-6">
             <div class="glass-card p-4 text-center mb-4">
                 <h5 class="fw-bold mb-3"><i class="bi bi-timer"></i> Timer Fokus</h5>
-                <div class="timer-container mx-auto mb-3" style="max-width: 320px;">
-                    <div class="timer-digit" id="timerDisplay">25:00</div>
-                    <div id="timerModeText" class="small fw-bold text-uppercase tracking-wider text-success" style="font-size: 0.75rem;">Fokus Dimulai</div>
+                
+                <div class="timear-container mx-auto mb-2" style="max-width: 320px;">
+                    <div class="timer-digit" id="timerDisplay">00:25:00</div>
+                    <div id="timerModeText" class="small fw-bold text-uppercase tracking-wider text-success" style="font-size: 0.75rem; letter-spacing: 0.5px;">Fokus Dimulai</div>
                     <div class="timer-progress-ring">
                         <div id="timerRingBar" class="timer-progress-bar"></div>
+                    </div>
+                </div>
+
+                <div class="wheel-picker-box mx-auto mb-4" style="max-width: 320px;">
+                    <div class="row text-center g-0 mb-2">
+                        <div class="col-4 wheel-label-header">Jam</div>
+                        <div class="col-4 wheel-label-header">Menit</div>
+                        <div class="col-4 wheel-label-header">Detik</div>
+                    </div>
+                    
+                    <div class="wheel-container">
+                        <div class="wheel-selection-center"></div>
+                        
+                        <div id="wheelHours" class="wheel-column">
+                            <div class="wheel-spacer-top-bottom"></div>
+                            <div class="wheel-spacer-top-bottom"></div>
+                        </div>
+                        <div class="wheel-separator-dots">:</div>
+                        <div id="wheelMinutes" class="wheel-column">
+                            <div class="wheel-spacer-top-bottom"></div>
+                            <div class="wheel-spacer-top-bottom"></div>
+                        </div>
+                        <div class="wheel-separator-dots">:</div>
+                        <div id="wheelSeconds" class="wheel-column">
+                            <div class="wheel-spacer-top-bottom"></div>
+                            <div class="wheel-spacer-top-bottom"></div>
+                        </div>
                     </div>
                 </div>
                 
@@ -290,111 +388,51 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ------------------- 9. INTEGRASI MATA IKUT KURSOR (TERMASUK DI LUAR KANVAS) -------------------
+    // ------------------- KONTROL MATA INTERAKTIF -------------------
     const canvas = document.getElementById('petCanvas');
     const ctx = canvas.getContext('2d');
-    let currentAnimal = 'frog';
-    
-    // Titik target default di tengah mata
-    let targetX = 100;
-    let targetY = 100;
+    let currentAnimal = 'frog'; let targetX = 100, targetY = 100;
 
-    // Menghitung koordinat kursor relatif terhadap canvas walaupun kursor berada di luar canvas card
     document.addEventListener('mousemove', (e) => {
         const rect = canvas.getBoundingClientRect();
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        
-        // Translasi posisi layar global ke koordinat canvas lokal
-        targetX = (e.clientX - rect.left) * scaleX;
-        targetY = (e.clientY - rect.top) * scaleY;
-        
+        const scaleX = canvas.width / rect.width; const scaleY = canvas.height / rect.height;
+        targetX = (e.clientX - rect.left) * scaleX; targetY = (e.clientY - rect.top) * scaleY;
         drawPet();
     });
 
     function drawEye(centerX, centerY, eyeRadius, pupilRadius, mx, my) {
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, eyeRadius, 0, 2 * Math.PI);
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fill();
-        ctx.strokeStyle = "#2c3e2f";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        
-        let dx = mx - centerX;
-        let dy = my - centerY;
-        let angle = Math.atan2(dy, dx);
-        
-        // Jarak gerakan pupil dibatasi agar tidak keluar bola mata
+        ctx.beginPath(); ctx.arc(centerX, centerY, eyeRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = "#FFFFFF"; ctx.fill(); ctx.strokeStyle = "#2c3e2f"; ctx.lineWidth = 1.5; ctx.stroke();
+        let dx = mx - centerX; let dy = my - centerY; let angle = Math.atan2(dy, dx);
         let distance = Math.min(eyeRadius - pupilRadius - 2, Math.hypot(dx, dy) * 0.15);
-        let offsetX = Math.cos(angle) * distance;
-        let offsetY = Math.sin(angle) * distance;
-        
-        ctx.beginPath();
-        ctx.arc(centerX + offsetX, centerY + offsetY, pupilRadius, 0, 2 * Math.PI);
-        ctx.fillStyle = "#1f2e1c";
-        ctx.fill();
-        
-        // Kilauan mata
-        ctx.beginPath();
-        ctx.arc(centerX + offsetX - 2, centerY + offsetY - 2, pupilRadius * 0.3, 0, 2 * Math.PI);
-        ctx.fillStyle = "white";
-        ctx.fill();
+        let offsetX = Math.cos(angle) * distance; let offsetY = Math.sin(angle) * distance;
+        ctx.beginPath(); ctx.arc(centerX + offsetX, centerY + offsetY, pupilRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = "#1f2e1c"; ctx.fill();
+        ctx.beginPath(); ctx.arc(centerX + offsetX - 2, centerY + offsetY - 2, pupilRadius * 0.3, 0, 2 * Math.PI);
+        ctx.fillStyle = "white"; ctx.fill();
     }
     
     function drawFrog(mx, my) {
-        ctx.fillStyle = "#6B8E23";
-        ctx.beginPath();
-        ctx.ellipse(100, 110, 55, 50, 0, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = "#556B2F";
-        ctx.beginPath();
-        ctx.ellipse(100, 125, 40, 30, 0, 0, Math.PI*2);
-        ctx.fill();
-        drawEye(75, 75, 17, 7, mx, my);
-        drawEye(125, 75, 17, 7, mx, my);
-        ctx.beginPath();
-        ctx.arc(100, 105, 20, 0.1, Math.PI - 0.1);
-        ctx.strokeStyle = "#3A2A1A";
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.fillStyle = "#6B8E23"; ctx.beginPath(); ctx.ellipse(100, 110, 55, 50, 0, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#556B2F"; ctx.beginPath(); ctx.ellipse(100, 125, 40, 30, 0, 0, Math.PI*2); ctx.fill();
+        drawEye(75, 75, 17, 7, mx, my); drawEye(125, 75, 17, 7, mx, my);
+        ctx.beginPath(); ctx.arc(100, 105, 20, 0.1, Math.PI - 0.1); ctx.strokeStyle = "#3A2A1A"; ctx.lineWidth = 2; ctx.stroke();
     }
     
     function drawCat(mx, my) {
-        ctx.fillStyle = "#F4A261";
-        ctx.beginPath();
-        ctx.ellipse(100, 110, 50, 48, 0, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = "#E76F51";
-        ctx.beginPath();
-        ctx.moveTo(60, 70); ctx.lineTo(75, 40); ctx.lineTo(90, 70); ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(140, 70); ctx.lineTo(125, 40); ctx.lineTo(110, 70); ctx.fill();
-        drawEye(72, 80, 15, 6, mx, my);
-        drawEye(128, 80, 15, 6, mx, my);
-        ctx.fillStyle = "#D95B43";
-        ctx.beginPath();
-        ctx.arc(100, 98, 5, 0, 2*Math.PI);
-        ctx.fill();
+        ctx.fillStyle = "#F4A261"; ctx.beginPath(); ctx.ellipse(100, 110, 50, 48, 0, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#E76F51"; ctx.beginPath(); ctx.moveTo(60, 70); ctx.lineTo(75, 40); ctx.lineTo(90, 70); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(140, 70); ctx.lineTo(125, 40); ctx.lineTo(110, 70); ctx.fill();
+        drawEye(72, 80, 15, 6, mx, my); drawEye(128, 80, 15, 6, mx, my);
+        ctx.fillStyle = "#D95B43"; ctx.beginPath(); ctx.arc(100, 98, 5, 0, 2*Math.PI); ctx.fill();
     }
     
     function drawDog(mx, my) {
-        ctx.fillStyle = "#D4A373";
-        ctx.beginPath();
-        ctx.ellipse(100, 110, 52, 48, 0, 0, Math.PI*2);
-        ctx.fill();
-        ctx.fillStyle = "#B97F44";
-        ctx.beginPath();
-        ctx.ellipse(100, 125, 35, 28, 0, 0, Math.PI*2);
-        ctx.fill();
-        drawEye(75, 85, 14, 6, mx, my);
-        drawEye(125, 85, 14, 6, mx, my);
-        ctx.fillStyle = "#6B3E1C";
-        ctx.beginPath();
-        ctx.arc(100, 102, 8, 0, 2*Math.PI);
-        ctx.fill();
+        ctx.fillStyle = "#D4A373"; ctx.beginPath(); ctx.ellipse(100, 110, 52, 48, 0, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#B97F44"; ctx.beginPath(); ctx.ellipse(100, 125, 35, 28, 0, 0, Math.PI*2); ctx.fill();
+        drawEye(75, 85, 14, 6, mx, my); drawEye(125, 85, 14, 6, mx, my);
+        ctx.fillStyle = "#6B3E1C"; ctx.beginPath(); ctx.arc(100, 102, 8, 0, 2*Math.PI); ctx.fill();
     }
     
     function drawPet() {
@@ -405,52 +443,75 @@
     }
     
     document.querySelectorAll('.emoji-picker span').forEach(btn => {
-        btn.addEventListener('click', () => {
-            currentAnimal = btn.getAttribute('data-animal');
-            drawPet();
-        });
+        btn.addEventListener('click', () => { currentAnimal = btn.getAttribute('data-animal'); drawPet(); });
     });
 
-    // ------------------- DATA ENGINE (LOCAL STORAGE & 5. STATS AUTO UPDATE) -------------------
-    let timerInterval = null;
-    let isRunning = false;
-    let currentMode = "focus";
-    let focusMinutesSelected = 25;
-    let breakMinutes = 5;
-    let currentSeconds = focusMinutesSelected * 60;
-    let totalDurationInMode = focusMinutesSelected * 60;
+    // ------------------- ENGINE 3D WHEEL SCROLL LOGIC -------------------
+    let timerInterval = null; let isRunning = false; let currentMode = "focus";
+    let userFocusSeconds = 25 * 60; let userBreakSeconds = 5 * 60;
+    let currentSeconds = userFocusSeconds; let totalDurationInMode = userFocusSeconds;
     
-    let stats = {
-        activeBreakCompleted: 0,
-        focusMinutesTotal: 0,
-        weeklyStreak: 0,
-        lastStreakDate: null,
-        totalFocusSessionsToday: 0,
-        memos: []
-    };
+    let stats = { activeBreakCompleted: 0, focusMinutesTotal: 0, weeklyStreak: 0, lastStreakDate: null, totalFocusSessionsToday: 0, memos: [] };
+    let tasks = [{ text: "Implement auth module", completed: false }, { text: "Tulis laporan praktikum", completed: false }, { text: "Review PR teman", completed: false }];
 
-    let tasks = [
-        { text: "Implement auth module", completed: false },
-        { text: "Tulis laporan praktikum", completed: false },
-        { text: "Review PR teman", completed: false }
-    ];
-    
+    function build3DWheelPicker() {
+        setupWheelColumn('wheelHours', 23); setupWheelColumn('wheelMinutes', 59); setupWheelColumn('wheelSeconds', 59);
+        setupWheelScrollListener('wheelHours'); setupWheelScrollListener('wheelMinutes'); setupWheelScrollListener('wheelSeconds');
+        setWheelActiveValue('wheelHours', 0); setWheelActiveValue('wheelMinutes', 25); setWheelActiveValue('wheelSeconds', 0);
+    }
+
+    function setupWheelColumn(columnId, maxVal) {
+        const col = document.getElementById(columnId); const endSpacer = col.lastElementChild;
+        for (let i = 0; i <= maxVal; i++) {
+            const item = document.createElement('div'); item.className = 'wheel-item';
+            item.setAttribute('data-val', i); item.innerText = i.toString().padStart(2, '0');
+            col.insertBefore(item, endSpacer);
+        }
+    }
+
+    function setupWheelScrollListener(columnId) {
+        const col = document.getElementById(columnId);
+        col.addEventListener('scroll', () => {
+            if(isRunning) stopTimer();
+            const items = col.querySelectorAll('.wheel-item');
+            let centerItem = null; let minDistance = Infinity;
+
+            items.forEach(item => {
+                const rect = item.getBoundingClientRect(); const containerRect = col.getBoundingClientRect();
+                const centerPos = containerRect.top + (containerRect.height / 2);
+                const itemCenter = rect.top + (rect.height / 2); const dist = Math.abs(centerPos - itemCenter);
+                item.classList.remove('selected');
+                if (dist < minDistance) { minDistance = dist; centerItem = item; }
+            });
+            if (centerItem) { centerItem.classList.add('selected'); calculateTotalSecondsFromWheels(); }
+        });
+    }
+
+    function setWheelActiveValue(columnId, val) {
+        const col = document.getElementById(columnId); const targetItem = col.querySelector(`.wheel-item[data-val="${val}"]`);
+        if (targetItem) { col.scrollTop = targetItem.offsetTop - 60; targetItem.classList.add('selected'); }
+    }
+
+    function calculateTotalSecondsFromWheels() {
+        const activeHour = document.querySelector('#wheelHours .wheel-item.selected');
+        const activeMin = document.querySelector('#wheelMinutes .wheel-item.selected');
+        const activeSec = document.querySelector('#wheelSeconds .wheel-item.selected');
+
+        if (activeHour && activeMin && activeSec) {
+            let h = parseInt(activeHour.getAttribute('data-val')); let m = parseInt(activeMin.getAttribute('data-val')); let s = parseInt(activeSec.getAttribute('data-val'));
+            let total = (h * 3600) + (m * 60) + s; if (total <= 0) total = 1;
+            if (currentMode === "focus") userFocusSeconds = total; else userBreakSeconds = total;
+            currentSeconds = total; totalDurationInMode = total; updateTimerDisplay();
+        }
+    }
+
+    // ------------------- PERSISTENCE STORAGE & UTILS -------------------
     function loadStorageData() {
         const savedStats = localStorage.getItem('pomostep_stats');
-        if (savedStats) {
-            try { stats = { ...stats, ...JSON.parse(savedStats) }; } catch(e) {}
-        }
+        if (savedStats) { try { stats = { ...stats, ...JSON.parse(savedStats) }; } catch(e) {} }
         const savedTasks = localStorage.getItem('pomostep_tasks');
-        if (savedTasks) {
-            try { tasks = JSON.parse(savedTasks); } catch(e) {}
-        }
-        
-        // 7. Check Streak logic saat Web dimuat (Satu kali per hari kalender berbeda)
-        verifyStreakLogic();
-        
-        renderTasks();
-        updateStatsUI();
-        renderMemos();
+        if (savedTasks) { try { tasks = JSON.parse(savedTasks); } catch(e) {} }
+        verifyStreakLogic(); renderTasks(); updateStatsUI(); renderMemos();
     }
     
     function saveData() {
@@ -459,38 +520,18 @@
         updateStatsUI();
     }
 
-    // 7. STREAK HARI (Bertambah 1 per hari yang berbeda, bukan tiap buka web)
     function verifyStreakLogic() {
         const todayStr = new Date().toDateString();
-        
-        if (!stats.lastStreakDate) {
-            // Pengguna baru pertama kali menggunakan web
-            stats.weeklyStreak = 0;
-        } else {
+        if (stats.lastStreakDate) {
             const lastDate = new Date(stats.lastStreakDate);
-            const todayDate = new Date(todayStr);
-            
-            // Hitung selisih hari
-            const diffTime = Math.abs(todayDate - lastDate);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 1) {
-                // Sempurna, dibuka di hari esoknya berturut-turut!
-                // Catatan: Penambahan rill +1 dilakukan ketika satu sesi fokus selesai dikerjakan pada hari itu
-            } else if (diffDays > 1) {
-                // Streak hangus karena melewati lebih dari satu hari tidak membuka/menyelesaikan sesi
-                stats.weeklyStreak = 0;
-                localStorage.setItem('pomostep_stats', JSON.stringify(stats));
-            }
+            const diffDays = Math.floor(Math.abs(new Date(todayStr) - lastDate) / (1000 * 60 * 60 * 24));
+            if (diffDays > 1) { stats.weeklyStreak = 0; localStorage.setItem('pomostep_stats', JSON.stringify(stats)); }
         }
     }
 
     function triggerStreakIncrement() {
         const todayStr = new Date().toDateString();
-        if (stats.lastStreakDate !== todayStr) {
-            stats.weeklyStreak += 1;
-            stats.lastStreakDate = todayStr;
-        }
+        if (stats.lastStreakDate !== todayStr) { stats.weeklyStreak += 1; stats.lastStreakDate = todayStr; }
     }
     
     function updateStatsUI() {
@@ -500,25 +541,17 @@
         document.getElementById('totalSessionsToday').innerText = stats.totalFocusSessionsToday;
         document.getElementById('nextSessionNum').innerText = stats.totalFocusSessionsToday + 1;
         
-        // 5. Hitung Tugas 0/0 otomatis berdasarkan total array tugas
         let completedCount = tasks.filter(t => t.completed).length;
         document.getElementById('tasksRatio').innerText = `${completedCount}/${tasks.length}`;
-        
-        // Progress Bar berdasarkan Target Harian (60 menit)
         let percent = Math.min(100, (stats.focusMinutesTotal / 60) * 100);
         document.getElementById('focusProgressBar').style.width = percent + "%";
     }
 
-    // ------------------- TASK MANAGEMENT SYSTEM -------------------
     function renderTasks() {
-        const todoList = document.getElementById('todoList');
-        todoList.innerHTML = "";
-        
+        const todoList = document.getElementById('todoList'); todoList.innerHTML = "";
         tasks.forEach((task, index) => {
             const li = document.createElement('li');
-            // 6. Nama dicoret jika status checklist adalah true (completed)
             li.className = `todo-item-custom ${task.completed ? 'completed' : ''}`;
-            
             li.innerHTML = `
                 <input class="form-check-input me-2" type="checkbox" data-index="${index}" ${task.completed ? 'checked' : ''}>
                 <span>${task.text}</span>
@@ -527,169 +560,110 @@
             todoList.appendChild(li);
         });
 
-        // Event listener checklist tugas
         document.querySelectorAll('.todo-item-custom input[type="checkbox"]').forEach(cb => {
             cb.addEventListener('change', (e) => {
                 const index = parseInt(e.target.getAttribute('data-index'));
-                tasks[index].completed = e.target.checked;
-                saveData();
-                renderTasks(); // render ulang agar efek coret aktif langsung
+                tasks[index].completed = e.target.checked; saveData(); renderTasks();
             });
         });
 
-        // Event listener hapus tugas
         document.querySelectorAll('.btn-delete-task').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const index = parseInt(e.target.getAttribute('data-index'));
-                tasks.splice(index, 1);
-                saveData();
-                renderTasks();
+                tasks.splice(index, 1); saveData(); renderTasks();
             });
         });
     }
 
-    // 1. Aksi Tombol tambah tugas di sebelah TUGAS SESI INI
     document.getElementById('addTaskBtn').addEventListener('click', () => {
         const taskName = prompt("Masukkan nama tugas baru:");
-        if (taskName && taskName.trim() !== "") {
-            tasks.push({ text: taskName.trim(), completed: false });
-            saveData();
-            renderTasks();
-        }
+        if (taskName && taskName.trim() !== "") { tasks.push({ text: taskName.trim(), completed: false }); saveData(); renderTasks(); }
     });
 
-    // 2. Mengelola Memo Pengingat Kerja Selesai Fokus
     function renderMemos() {
         const area = document.getElementById('memoLogArea');
         if(stats.memos.length === 0) {
-            area.innerHTML = `<div class="small text-muted italic">Belum ada rekaman fokus. Selesaikan sesi untuk menulis memo.</div>`;
-            return;
+            area.innerHTML = `<div class="small text-muted italic">Belum ada rekaman fokus. Selesaikan sesi untuk menulis memo.</div>`; return;
         }
         area.innerHTML = stats.memos.map(m => `<div class="memo-log-item"><b>[${m.time}]</b> ${m.text}</div>`).join('');
     }
 
     function createFocusMemo() {
-        // Pemicu memo setelah fokus selesai
         setTimeout(() => {
-            const textMemo = prompt("Sesi fokus selesai! Tulis memo singkat tentang apa yang baru saja Anda selesaikan agar selalu ingat:");
-            const validText = (textMemo && textMemo.trim() !== "") ? textMemo.trim() : "Menyelesaikan sesi fokus dengan produktif.";
-            
+            const textMemo = prompt("Sesi fokus selesai! Tulis memo singkat:");
+            const validText = (textMemo && textMemo.trim() !== "") ? textMemo.trim() : "Menyelesaikan fokus kustom wheel-scroll.";
             const timeNow = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            stats.memos.unshift({ time: timeNow, text: validText });
-            if(stats.memos.length > 10) stats.memos.pop(); // batasi 10 riwayat item
-            saveData();
-            renderMemos();
+            stats.memos.unshift({ time: timeNow, text: validText }); if(stats.memos.length > 10) stats.memos.pop();
+            saveData(); renderMemos();
         }, 600);
     }
 
-    // ------------------- DIGITAL TIMER ENGINE -------------------
+    // ------------------- CORE TIMER LOGIC -------------------
     function updateTimerDisplay() {
-        let mins = Math.floor(currentSeconds / 60);
-        let secs = currentSeconds % 60;
-        document.getElementById('timerDisplay').innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
-        
-        // Update Ring Bar Baris Merah/Hijau di bawah Angka
-        let barPercent = (currentSeconds / totalDurationInMode) * 100;
+        let hrs = Math.floor(currentSeconds / 3600); let mins = Math.floor((currentSeconds % 3600) / 60); let secs = currentSeconds % 60;
+        document.getElementById('timerDisplay').innerText = `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        let barPercent = totalDurationInMode > 0 ? (currentSeconds / totalDurationInMode) * 100 : 0;
         document.getElementById('timerRingBar').style.width = barPercent + "%";
     }
     
-    function stopTimer() { 
-        if(timerInterval) { clearInterval(timerInterval); timerInterval = null; } 
-        isRunning = false; 
-    }
-    
-    function resetTimerByMode() {
-        stopTimer();
-        if (currentMode === "focus") currentSeconds = focusMinutesSelected * 60;
-        else currentSeconds = breakMinutes * 60;
-        totalDurationInMode = currentSeconds;
-        updateTimerDisplay();
-    }
+    function stopTimer() { if(timerInterval) { clearInterval(timerInterval); timerInterval = null; } isRunning = false; }
     
     function startTimer() {
-        if (isRunning) return;
-        isRunning = true;
+        if (isRunning) return; isRunning = true;
         timerInterval = setInterval(() => {
             if (currentSeconds <= 0) {
                 stopTimer();
                 if (currentMode === "focus") {
-                    // Berhasil fokus
-                    stats.focusMinutesTotal += focusMinutesSelected;
-                    stats.totalFocusSessionsToday += 1;
-                    triggerStreakIncrement();
-                    saveData();
-                    
+                    let addedMinutes = Math.max(1, Math.round(userFocusSeconds / 60));
+                    stats.focusMinutesTotal += addedMinutes; stats.totalFocusSessionsToday += 1;
+                    triggerStreakIncrement(); saveData();
                     alert("✅ Sesi fokus selesai! Waktunya active break!");
-                    
-                    // Panggil fungsi memo pengingat
-                    createFocusMemo();
-                    
-                    setMode("break");
+                    createFocusMemo(); setMode("break");
                 } else {
-                    // Berhasil break
-                    stats.activeBreakCompleted += 1;
-                    saveData();
-                    alert("🎉 Break selesai! Saatnya kembali fokus!");
-                    setMode("focus");
+                    stats.activeBreakCompleted += 1; saveData();
+                    alert("🎉 Break selesai! Saatnya kembali fokus!"); setMode("focus");
                 }
                 return;
             }
-            currentSeconds--;
-            updateTimerDisplay();
+            currentSeconds--; updateTimerDisplay();
         }, 1000);
     }
     
     function setMode(mode) {
-        currentMode = mode;
-        const modeText = document.getElementById('timerModeText');
+        currentMode = mode; const modeText = document.getElementById('timerModeText');
         if(mode === "focus") {
             document.getElementById('focusModeBtn').classList.add('active');
             document.getElementById('breakModeBtn').classList.remove('active');
-            modeText.innerText = "Fokus Dimulai";
-            modeText.className = "small fw-bold text-uppercase tracking-wider text-success";
+            modeText.innerText = "Fokus Dimulai"; modeText.className = "small fw-bold text-uppercase tracking-wider text-success";
+            let h = Math.floor(userFocusSeconds / 3600); let m = Math.floor((userFocusSeconds % 3600) / 60); let s = userFocusSeconds % 60;
+            setWheelActiveValue('wheelHours', h); setWheelActiveValue('wheelMinutes', m); setWheelActiveValue('wheelSeconds', s);
         } else {
             document.getElementById('breakModeBtn').classList.add('active');
             document.getElementById('focusModeBtn').classList.remove('active');
-            modeText.innerText = "Waktunya Istirahat Aktivitas";
-            modeText.className = "small fw-bold text-uppercase tracking-wider text-warning";
+            modeText.innerText = "Waktunya Istirahat Aktivitas"; modeText.className = "small fw-bold text-uppercase tracking-wider text-warning";
+            let h = Math.floor(userBreakSeconds / 3600); let m = Math.floor((userBreakSeconds % 3600) / 60); let s = userBreakSeconds % 60;
+            setWheelActiveValue('wheelHours', h); setWheelActiveValue('wheelMinutes', m); setWheelActiveValue('wheelSeconds', s);
         }
-        resetTimerByMode();
+        stopTimer(); currentSeconds = (mode === "focus") ? userFocusSeconds : userBreakSeconds;
+        totalDurationInMode = currentSeconds; updateTimerDisplay();
     }
     
     document.getElementById('focusModeBtn').addEventListener('click', () => setMode('focus'));
     document.getElementById('breakModeBtn').addEventListener('click', () => setMode('break'));
     document.getElementById('startTimerBtn').addEventListener('click', startTimer);
     document.getElementById('pauseTimerBtn').addEventListener('click', stopTimer);
-    document.getElementById('resetTimerBtn').addEventListener('click', resetTimerByMode);
+    document.getElementById('resetTimerBtn').addEventListener('click', () => { stopTimer(); setMode(currentMode); });
     
-    document.querySelectorAll('#focusPresetGroup .session-chip').forEach(chip => {
-        chip.addEventListener('click', (e) => {
-            document.querySelectorAll('#focusPresetGroup .session-chip').forEach(c => c.classList.remove('active'));
-            e.target.classList.add('active');
-            focusMinutesSelected = parseInt(e.target.getAttribute('data-minutes'));
-            if(currentMode === "focus") resetTimerByMode();
-        });
-    });
-    
-    // Tombol reset total data di pengaturan
     document.getElementById('resetDataBtn').addEventListener('click', () => {
-        if(confirm("Apakah Anda yakin ingin mengatur ulang semua statistik PomoStep & List Tugas Anda?")) {
+        if(confirm("Apakah Anda yakin ingin reset semua data?")) {
             localStorage.clear();
             stats = { activeBreakCompleted: 0, focusMinutesTotal: 0, weeklyStreak: 0, lastStreakDate: null, totalFocusSessionsToday: 0, memos: [] };
-            tasks = [
-                { text: "Implement auth module", completed: false },
-                { text: "Tulis laporan praktikum", completed: false },
-                { text: "Review PR teman", completed: false }
-            ];
-            setMode('focus');
-            loadStorageData();
+            tasks = [{ text: "Implement auth module", completed: false }, { text: "Tulis laporan praktikum", completed: false }, { text: "Review PR teman", completed: false }];
+            userFocusSeconds = 25 * 60; userBreakSeconds = 5 * 60; setMode('focus'); loadStorageData();
         }
     });
 
-    // Jalankan aplikasi pertama kali
-    loadStorageData();
-    resetTimerByMode();
-    drawPet();
+    build3DWheelPicker(); loadStorageData(); setMode('focus'); drawPet();
 </script>
 </body>
 </html>
