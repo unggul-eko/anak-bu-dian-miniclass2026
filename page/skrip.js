@@ -18,13 +18,7 @@ const animalCursors = {
   frog: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐸</text></svg>",
   cat: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐱</text></svg>",
   dog: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐶</text></svg>",
-  rabbit:
-    "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐰</text></svg>",
-  butterfly:
-    "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🦋</text></svg>",
-  panda:
-    "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐼</text></svg>",
-};
+ };
 
 const canvas = document.getElementById("petCanvas");
 const ctx = canvas.getContext("2d");
@@ -136,78 +130,6 @@ function drawDog(mx, my) {
   ctx.arc(90, 94, 6, 0, 2 * Math.PI);
   ctx.fill();
 }
-function drawRabbit(mx, my) {
-  ctx.fillStyle = "#Eaeaea";
-  ctx.beginPath();
-  ctx.ellipse(55, 45, 12, 35, -0.1, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#Ffced6";
-  ctx.beginPath();
-  ctx.ellipse(55, 48, 6, 25, -0.1, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#Eaeaea";
-  ctx.beginPath();
-  ctx.ellipse(125, 45, 12, 35, 0.1, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#Ffced6";
-  ctx.beginPath();
-  ctx.ellipse(125, 48, 6, 25, 0.1, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#F7F7F7";
-  ctx.beginPath();
-  ctx.ellipse(90, 105, 46, 42, 0, 0, Math.PI * 2);
-  ctx.fill();
-  drawEye(68, 85, 11, 4, mx, my);
-  drawEye(112, 85, 11, 4, mx, my);
-  ctx.fillStyle = "#Ffa4b4";
-  ctx.beginPath();
-  ctx.moveTo(86, 96);
-  ctx.lineTo(94, 96);
-  ctx.lineTo(90, 100);
-  ctx.fill();
-}
-function drawButterfly(mx, my) {
-  ctx.fillStyle = "#81d4fa";
-  ctx.beginPath();
-  ctx.ellipse(45, 100, 32, 24, -0.3, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(40, 122, 22, 16, 0.2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#81d4fa";
-  ctx.beginPath();
-  ctx.ellipse(135, 100, 32, 24, 0.3, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.ellipse(140, 122, 22, 16, -0.2, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#5d4037";
-  ctx.beginPath();
-  ctx.ellipse(90, 105, 14, 40, 0, 0, Math.PI * 2);
-  ctx.fill();
-  drawEye(82, 82, 7, 3, mx, my);
-  drawEye(98, 82, 7, 3, mx, my);
-}
-function drawPanda(mx, my) {
-  ctx.fillStyle = "#2c2c2c";
-  ctx.beginPath();
-  ctx.arc(52, 60, 18, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(128, 60, 18, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#FFFFFF";
-  ctx.beginPath();
-  ctx.ellipse(90, 105, 50, 44, 0, 0, Math.PI * 2);
-  ctx.fill();
-  drawEye(68, 88, 10, 4, mx, my, true);
-  drawEye(112, 88, 10, 4, mx, my, true);
-  ctx.fillStyle = "#2c2c2c";
-  ctx.beginPath();
-  ctx.ellipse(90, 102, 7, 4, 0, 0, Math.PI * 2);
-  ctx.fill();
-}
-
 function drawPet() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (currentAnimal === "frog") drawFrog(targetX, targetY);

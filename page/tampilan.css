@@ -479,8 +479,8 @@ body {
 .calendar-cell.has-event::after {
   content: "🌟";
   position: absolute;
-  top: -2px;
-  right: -2px;
+  top: 1px;
+  right: 1px;
   font-size: 1.1rem;
   animation: pulseStar 2s infinite;
 }
@@ -523,8 +523,8 @@ body {
   width: 75px !important;
 }
 .flatpickr-weekday {
-  font-size: 1.1rem !important;
-  font-weight: 700 !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
   color: #2e7d32 !important;
 }
 .flatpickr-innerContainer {
@@ -545,9 +545,9 @@ body {
   max-width: 58px !important;
   height: 52px !important;
   line-height: 52px !important;
-  font-size: 1.35rem !important;
-  font-weight: 700 !important;
-  border-radius: 12px !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  border-radius: 10px !important;
   margin: 2px !important;
   color: #1b4d1b !important;
 }

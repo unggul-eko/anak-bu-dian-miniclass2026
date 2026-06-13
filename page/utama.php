@@ -29,7 +29,8 @@ session_start();
             <span class="nav-pill-custom" data-target="timer-section"><i class="bi bi-stopwatch"></i> Timer</span>
             <span class="nav-pill-custom" data-target="tugas-section"><i class="bi bi-calendar-event"></i> Jadwal &amp; Tugas</span>
             <span class="nav-pill-custom" data-target="memo-section"><i class="bi bi-journal-text"></i> Memo</span>
-            <span class="nav-pill-custom" data-target="statistik-section"><i class="bi bi-graph-up"></i> Statistik</span>
+            <span onclick="statistik.php"
+            class="nav-pill-custom" data-target="statistik-section"><i class="bi bi-graph-up"></i> Statistik</span>
             <span class="nav-pill-custom" id="resetDataBtn"><i class="bi bi-arrow-repeat"></i> Pengaturan</span>
         </div>
     </div>
@@ -58,13 +59,9 @@ session_start();
                     </div>
                     <div class="small fw-bold text-success mb-2"><i class="bi bi-magic"></i> Pilih Kursor &amp; Teman Fokus Anda:</div>
                     <div class="emoji-picker d-flex gap-1 justify-content-center flex-wrap mt-1">
-                        <span data-animal="normal" class="shadow-sm" title="Normal Laptop">💻 Normal</span>
                         <span data-animal="frog" class="shadow-sm active-cursor" title="Katak">🐸 Katak</span>
                         <span data-animal="cat" class="shadow-sm" title="Kucing">🐱 Kucing</span>
                         <span data-animal="dog" class="shadow-sm" title="Anjing">🐶 Anjing</span>
-                        <span data-animal="rabbit" class="shadow-sm" title="Kelinci">🐰 Kelinci</span>
-                        <span data-animal="butterfly" class="shadow-sm" title="Kupu-Kupu">🦋 Kupu</span>
-                        <span data-animal="panda" class="shadow-sm" title="Panda">🐼 Panda</span>
                     </div>
                 </div>
             </div>
@@ -307,7 +304,7 @@ session_start();
             </div>
             <div class="mb-2">
                 <label class="form-label small fw-bold text-secondary">Mata Kuliah / Jenis Kegiatan</label>
-                <input type="text" class="form-control" id="formTaskSubject" placeholder="Contoh: pw" required style="border-radius:12px;">
+                <input type="text" class="form-control" id="formTaskSubject" placeholder="Contoh: Matematika" required style="border-radius:12px;">
             </div>
             <div class="row g-2">
                 <div class="col-7">
