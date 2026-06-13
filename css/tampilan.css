@@ -647,7 +647,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 /* Tambahan kecil jika diperlukan */
         body {
-            background: linear-gradient(135deg, #e3eedf 0%, #cbdcc3 50%, #b1caa6 100%);
+          /*  background: linear-gradient(135deg, #e3eedf 0%, #cbdcc3 50%, #b1caa6 100%);
         }
         .header-nav-sticky {
             position: sticky;
