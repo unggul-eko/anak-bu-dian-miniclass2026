@@ -52,54 +52,53 @@ function drawEye(centerX, centerY, eyeRadius, pupilRadius, mx, my, isPanda = fal
   ctx.fill();
 }
 
-function drawFrog(mx, my) {
-  ctx.fillStyle = "#6B8E23"; ctx.beginPath(); ctx.ellipse(100, 110, 55, 50, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#FFFDD0"; ctx.beginPath(); ctx.ellipse(100, 125, 35, 25, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "rgba(255, 105, 180, 0.4)";
-  ctx.beginPath(); ctx.arc(60, 110, 10, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(140, 110, 10, 0, Math.PI*2); ctx.fill();
-  drawEye(75, 75, 17, 7, mx, my); drawEye(125, 75, 17, 7, mx, my);
-  ctx.beginPath(); ctx.arc(100, 105, 15, 0, Math.PI);
-  ctx.strokeStyle = "#3A2A1A"; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.stroke();
-}
-
-function drawCat(mx, my) {
-  ctx.fillStyle = "#F4A261"; ctx.beginPath(); ctx.ellipse(100, 110, 50, 48, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#E76F51";
-  ctx.beginPath(); ctx.moveTo(50, 85); ctx.lineTo(65, 35); ctx.lineTo(90, 75); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(150, 85); ctx.lineTo(135, 35); ctx.lineTo(110, 75); ctx.fill();
-  ctx.fillStyle = "#FFB6C1";
-  ctx.beginPath(); ctx.moveTo(56, 82); ctx.lineTo(67, 43); ctx.lineTo(84, 73); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(144, 82); ctx.lineTo(133, 43); ctx.lineTo(116, 73); ctx.fill();
-  ctx.fillStyle = "rgba(231, 111, 81, 0.35)";
-  ctx.beginPath(); ctx.arc(60, 115, 8, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(140, 115, 8, 0, Math.PI*2); ctx.fill();
-  drawEye(75, 85, 14, 6, mx, my); drawEye(125, 85, 14, 6, mx, my);
-  ctx.fillStyle = "#E76F51"; ctx.beginPath(); ctx.moveTo(96, 100); ctx.lineTo(104, 100); ctx.lineTo(100, 104); ctx.fill();
-  ctx.strokeStyle = "#4A3525"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
-  ctx.beginPath(); ctx.arc(94, 104, 6, 0.1, Math.PI - 0.2); ctx.stroke();
-  ctx.beginPath(); ctx.arc(106, 104, 6, 0.2, Math.PI - 0.1); ctx.stroke();
-}
-
-function drawDog(mx, my) {
-  ctx.fillStyle = "#D4A373"; ctx.beginPath(); ctx.ellipse(100, 110, 52, 48, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#A26E3A"; ctx.beginPath(); ctx.ellipse(45, 115, 14, 28, Math.PI/12, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(155, 115, 14, 28, -Math.PI/12, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#FEFAE0"; ctx.beginPath(); ctx.ellipse(100, 118, 22, 16, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "rgba(233, 196, 106, 0.4)";
-  ctx.beginPath(); ctx.arc(62, 115, 8, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(138, 115, 8, 0, Math.PI*2); ctx.fill();
-  drawEye(75, 85, 14, 6, mx, my); drawEye(125, 85, 14, 6, mx, my);
-  ctx.fillStyle = "#FF7B94"; ctx.beginPath(); ctx.arc(100, 122, 7, 0, Math.PI); ctx.fill();
-  ctx.fillStyle = "#4A2810"; ctx.beginPath(); ctx.ellipse(100, 112, 9, 6, 0, 0, Math.PI*2); ctx.fill();
-}
-
 function drawPet() {
   if(!ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  if (currentAnimal === "frog") drawFrog(targetX, targetY);
-  else if (currentAnimal === "cat") drawCat(targetX, targetY);
-  else if (currentAnimal === "dog") drawDog(targetX, targetY);
+  
+  // Menentukan titik tengah canvas secara otomatis
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+
+  if (currentAnimal === "frog") drawFrog(targetX, targetY, cx, cy);
+  else if (currentAnimal === "cat") drawCat(targetX, targetY, cx, cy);
+  else if (currentAnimal === "dog") drawDog(targetX, targetY, cx, cy);
+}
+
+function drawFrog(mx, my, cx, cy) {
+  ctx.fillStyle = "#6B8E23"; ctx.beginPath(); ctx.ellipse(cx, cy, 50, 45, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "#FFFDD0"; ctx.beginPath(); ctx.ellipse(cx, cy + 15, 30, 20, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "rgba(255, 105, 180, 0.4)";
+  ctx.beginPath(); ctx.arc(cx - 35, cy, 8, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx + 35, cy, 8, 0, Math.PI*2); ctx.fill();
+  drawEye(cx - 20, cy - 25, 15, 6, mx, my); drawEye(cx + 20, cy - 25, 15, 6, mx, my);
+  ctx.beginPath(); ctx.arc(cx, cy - 5, 12, 0, Math.PI);
+  ctx.strokeStyle = "#3A2A1A"; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.stroke();
+}
+
+function drawCat(mx, my, cx, cy) {
+  ctx.fillStyle = "#F4A261"; ctx.beginPath(); ctx.ellipse(cx, cy, 45, 42, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "#E76F51";
+  ctx.beginPath(); ctx.moveTo(cx - 45, cy - 25); ctx.lineTo(cx - 30, cy - 75); ctx.lineTo(cx - 5, cy - 35); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx + 45, cy - 25); ctx.lineTo(cx + 30, cy - 75); ctx.lineTo(cx + 5, cy - 35); ctx.fill();
+  ctx.fillStyle = "rgba(231, 111, 81, 0.35)";
+  ctx.beginPath(); ctx.arc(cx - 30, cy + 5, 8, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx + 30, cy + 5, 8, 0, Math.PI*2); ctx.fill();
+  drawEye(cx - 20, cy - 10, 12, 5, mx, my); drawEye(cx + 20, cy - 10, 12, 5, mx, my);
+  ctx.fillStyle = "#E76F51"; ctx.beginPath(); ctx.moveTo(cx - 5, cy + 5); ctx.lineTo(cx + 5, cy + 5); ctx.lineTo(cx, cy + 9); ctx.fill();
+  ctx.strokeStyle = "#4A3525"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.arc(cx - 7, cy + 9, 6, 0.1, Math.PI - 0.2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(cx + 7, cy + 9, 6, 0.2, Math.PI - 0.1); ctx.stroke();
+}
+
+function drawDog(mx, my, cx, cy) {
+  ctx.fillStyle = "#D4A373"; ctx.beginPath(); ctx.ellipse(cx, cy, 48, 45, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "#A26E3A"; ctx.beginPath(); ctx.ellipse(cx - 45, cy + 5, 12, 25, Math.PI/12, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx + 45, cy + 5, 12, 25, -Math.PI/12, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = "#FEFAE0"; ctx.beginPath(); ctx.ellipse(cx, cy + 8, 20, 14, 0, 0, Math.PI*2); ctx.fill();
+  drawEye(cx - 20, cy - 15, 12, 5, mx, my); drawEye(cx + 20, cy - 15, 12, 5, mx, my);
+  ctx.fillStyle = "#FF7B94"; ctx.beginPath(); ctx.arc(cx, cy + 12, 6, 0, Math.PI); ctx.fill();
+  ctx.fillStyle = "#4A2810"; ctx.beginPath(); ctx.ellipse(cx, cy + 2, 8, 5, 0, 0, Math.PI*2); ctx.fill();
 }
 
 document.querySelectorAll(".emoji-picker span").forEach((btn) => {
@@ -613,3 +612,21 @@ function initCustomPickers() {
   }
 }
 initCustomPickers();
+
+// ========== TAMBAHAN NAVIGASI CLICK-TO-SCROLL ==========
+document.querySelectorAll(".nav-pill-custom").forEach(pill => {
+    pill.addEventListener("click", function() {
+        const targetId = this.getAttribute("data-target");
+        const targetSection = document.getElementById(targetId);
+        
+        if (targetSection) {
+            targetSection.scrollIntoView({ 
+                behavior: "smooth", 
+                block: "start" 
+            });
+
+            document.querySelectorAll(".nav-pill-custom").forEach(p => p.classList.remove("active"));
+            this.classList.add("active");
+        }
+    });
+});
