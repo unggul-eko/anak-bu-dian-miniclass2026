@@ -13,23 +13,13 @@ session_start();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="tampilan.css">
+    <link rel="stylesheet" href="../css/tampilan.css">
 
 </head>
 <body>
 
 <div class="container py-4 py-md-5">
-    <!-- Header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-success border-opacity-25">
-        <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-lightning-charge-fill text-success fs-2"></i>
-            <h1 class="display-6 fw-bold" style="background: linear-gradient(135deg,#1b4d1b,#3c8c40); -webkit-background-clip:text; background-clip:text; color:transparent;">PomoStep</h1>
-        </div>
-        <div class="d-flex gap-2 flex-wrap">
-            <span onclick="window.location.href='/page/statistik.php'" class="badge bg-light text-dark px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-graph-up"></i> Statistik</span>
-            <span class="badge bg-light text-dark px-3 py-2 rounded-pill shadow-sm" id="resetDataBtn" style="cursor:pointer;"><i class="bi bi-arrow-repeat"></i> Pengaturan</span>
-        </div>
-    </div>
+    
 
     <!-- Nav Capsule (sticky) -->
     <div id="navCapsulesGroup" class="header-nav-sticky">
@@ -40,6 +30,8 @@ session_start();
             <span class="nav-pill-custom" data-target="tugas-section"><i class="bi bi-card-checklist"></i> Tugas & Kalender</span>
             <span class="nav-pill-custom" data-target="memo-section"><i class="bi bi-journal-text"></i> Memo</span>
             <span class="nav-pill-custom" data-target="statistik-section"><i class="bi bi-graph-up-arrow"></i> Statistik</span>
+            <span onclick="window.location.href='/page/statistik.php'" class="badge bg-light text-dark px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-graph-up"></i> Statistik</span>
+            <span class="badge bg-light text-dark px-3 py-2 rounded-pill shadow-sm" id="resetDataBtn" style="cursor:pointer;"><i class="bi bi-arrow-repeat"></i> Pengaturan</span>
         </div>
     </div>
 
@@ -65,13 +57,9 @@ session_start();
                     </div>
                     <div class="small fw-bold text-success mb-2"><i class="bi bi-magic"></i> Pilih Kursor &amp; Teman Fokus Anda:</div>
                     <div class="emoji-picker d-flex gap-1 justify-content-center flex-wrap mt-1">
-                        <span data-animal="normal" class="shadow-sm">💻 Normal</span>
                         <span data-animal="frog" class="shadow-sm active-cursor">🐸 Katak</span>
                         <span data-animal="cat" class="shadow-sm">🐱 Kucing</span>
                         <span data-animal="dog" class="shadow-sm">🐶 Anjing</span>
-                        <span data-animal="rabbit" class="shadow-sm">🐰 Kelinci</span>
-                        <span data-animal="butterfly" class="shadow-sm">🦋 Kupu</span>
-                        <span data-animal="panda" class="shadow-sm">🐼 Panda</span>
                     </div>
                 </div>
             </div>
@@ -186,7 +174,7 @@ session_start();
                     <h6 class="fw-bold m-0 text-success"><i class="bi bi-calendar3"></i> Kalender Aktivitas Kuliah</h6>
                     <span class="calendar-header-title fw-bold text-success" id="calendarMonthYearTitle">Juni 2026</span>
                 </div>
-                <p class="text-muted small mb-3"><i class="bi bi-info-circle"></i> Tanggal ber-bintang <span class="text-warning fw-bold">🌟</span> memiliki jadwal tugas / kuliah.</p>
+                <p class="text-muted small mb-3"><i class="bi bi-info-circle"></i> Tanggal ber-bintang <span class="text-warning fw-bold">⭐</span> memiliki jadwal tugas / kuliah.</p>
                 <div class="calendar-grid" id="calendarDaysContainer">
                     <div class="calendar-day-label">Min</div><div class="calendar-day-label">Sen</div><div class="calendar-day-label">Sel</div><div class="calendar-day-label">Rab</div><div class="calendar-day-label">Kam</div><div class="calendar-day-label">Jum</div><div class="calendar-day-label">Sab</div>
                 </div>
@@ -252,6 +240,6 @@ session_start();
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<script src="skrip.js"></script>
+<script src="../js/skrip.js"></script>
 </body>
 </html>

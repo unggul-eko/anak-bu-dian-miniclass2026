@@ -14,9 +14,6 @@ const animalCursors = {
   frog: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐸</text></svg>",
   cat: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐱</text></svg>",
   dog: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐶</text></svg>",
-  rabbit: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐰</text></svg>",
-  butterfly: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🦋</text></svg>",
-  panda: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐼</text></svg>"
 };
 
 const canvas = document.getElementById("petCanvas");
@@ -97,19 +94,12 @@ function drawDog(mx, my) {
   ctx.fillStyle = "#4A2810"; ctx.beginPath(); ctx.ellipse(100, 112, 9, 6, 0, 0, Math.PI*2); ctx.fill();
 }
 
-function drawRabbit(mx, my) { /* sederhana, bisa diisi sendiri */ drawFrog(mx,my); }
-function drawButterfly(mx, my) { drawCat(mx,my); }
-function drawPanda(mx, my) { drawDog(mx,my); }
-
 function drawPet() {
   if(!ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (currentAnimal === "frog") drawFrog(targetX, targetY);
   else if (currentAnimal === "cat") drawCat(targetX, targetY);
   else if (currentAnimal === "dog") drawDog(targetX, targetY);
-  else if (currentAnimal === "rabbit") drawRabbit(targetX, targetY);
-  else if (currentAnimal === "butterfly") drawButterfly(targetX, targetY);
-  else if (currentAnimal === "panda") drawPanda(targetX, targetY);
 }
 
 document.querySelectorAll(".emoji-picker span").forEach((btn) => {
