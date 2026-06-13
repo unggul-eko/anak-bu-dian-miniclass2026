@@ -1,3 +1,4 @@
+/* ========== GLOBAL & BODY ========== */
 html {
   scroll-behavior: smooth;
 }
@@ -9,6 +10,7 @@ body {
   transition: cursor 0.1s ease;
 }
 
+/* ========== HEADER STICKY ========== */
 .header-nav-sticky {
   position: sticky;
   top: 0;
@@ -48,6 +50,7 @@ body {
   }
 }
 
+/* ========== NAVIGASI PILL ========== */
 .nav-scroll-container {
   display: flex;
   gap: 0.5rem;
@@ -90,6 +93,7 @@ body {
   box-shadow: 0 8px 15px rgba(46, 125, 50, 0.2);
 }
 
+/* ========== HERO SECTION ========== */
 .hero-clean-wrapper {
   padding: 1rem 0;
 }
@@ -138,6 +142,7 @@ body {
   box-shadow: 0 10px 20px rgba(46, 125, 50, 0.15);
 }
 
+/* ========== GLASS CARD & TIMER ========== */
 .glass-card {
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(10px);
@@ -183,6 +188,7 @@ body {
   border-radius: 50px;
 }
 
+/* ========== WHEEL PICKER ========== */
 .wheel-container {
   display: flex;
   justify-content: center;
@@ -230,6 +236,7 @@ body {
   color: #a2bca0;
   scroll-snap-align: center;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 .wheel-item.selected {
   color: #1f5a2e;
@@ -249,6 +256,7 @@ body {
   margin-bottom: 4px;
 }
 
+/* ========== PET & SPEECH BUBBLE ========== */
 .pet-talk-bubble {
   position: relative;
   background: #ffffff;
@@ -275,12 +283,43 @@ body {
   width: 0;
 }
 
+canvas {
+  background: #fef3da;
+  border-radius: 50%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  width: 100%;
+  max-width: 150px;
+  aspect-ratio: 1 / 1;
+  display: block;
+  margin: 0 auto;
+  border: 3px solid white;
+}
+
+.emoji-picker span {
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  background: white;
+  border-radius: 50px;
+  padding: 5px 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #2e7d32;
+}
+.emoji-picker span:hover,
+.emoji-picker span.active-cursor {
+  background: #c8e6c9;
+  transform: scale(1.05);
+  border: 2px solid #2e7d32;
+}
+
+/* ========== DASHBOARD & STATISTIK ========== */
 .premium-dashboard-card {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(224, 245, 218, 0.85) 100%
-  );
+  background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(224,245,218,0.85) 100%);
   border: 1px solid rgba(46, 125, 50, 0.15);
   border-radius: 2.5rem;
   box-shadow: 0 15px 35px rgba(46, 125, 50, 0.05);
@@ -405,160 +444,57 @@ body {
   letter-spacing: 0.5px;
 }
 
-.btn-control-custom {
-  background-color: white;
-  color: #556b53;
-  border: 1px solid rgba(46, 125, 50, 0.2);
-  border-radius: 50px;
-  padding: 0.55rem 1.4rem;
-  font-weight: 700;
-  font-size: 0.88rem;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-}
-.btn-control-custom:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.1);
-  color: #1f5a2e;
-}
-.btn-status-active {
-  background: linear-gradient(135deg, #2e7d32, #4caf50) !important;
-  border-color: #2e7d32 !important;
-  color: white !important;
-}
-.btn-status-inactive {
-  background: linear-gradient(135deg, #d32f2f, #f44336) !important;
-  border-color: #dc3545 !important;
-  color: white !important;
-}
-
+/* ========== KALENDER & BINTANG ========== */
 .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr); /* Tetap 7 kolom */
-    gap: 8px;                             /* Jarak antar kotak yang pas */
-    padding: 10px;                        /* Memberi ruang di dalam kontainer */
-    width: 100%;                          /* Mengisi lebar kartu */
-    margin: 0 auto;                       /* Memastikan grid itu sendiri di tengah */
-    justify-items: center;                /* Memastikan tiap cell di tengah kolom */
-    align-items: center;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 10px;
+  width: 100%;
+  margin: 0 auto;
+  justify-items: center;
+  align-items: center;
 }
-
 .calendar-cell {
-    aspect-ratio: 1 / 1;                  /* Kotak sempurna */
-    width: 90%;                           /* Memberi sedikit ruang agar tidak terlalu mepet */
-    max-width: 60px;                      /* Batasan agar tidak terlalu besar di layar lebar */
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    font-size: 1.2rem;                    /* Ukuran font agar tidak keluar kotak */
-    font-weight: 800;
-    
-    background: #ffffff;
-    border-radius: 12px;
-    cursor: pointer;
-    border: 2px solid rgba(46, 125, 50, 0.08);
-    transition: all 0.2s ease;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 90%;
+  max-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  background: #ffffff;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px solid rgba(46, 125, 50, 0.08);
+  transition: all 0.2s ease;
+}
+/* 🌟 BINTANG UNTUK SEMUA TUGAS (BAIK SELESAI MAUPUN BELUM) */
+.calendar-cell.has-event::after {
+  content: "⭐";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 0.7rem;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+  pointer-events: none;
+}
+.calendar-cell.active-selected {
+  background: #2e7d32;
+  color: white;
+  border-color: #2e7d32;
+}
+.calendar-day-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #2e7d32;
+  text-align: center;
+  padding: 6px 0;
 }
 
-@keyframes pulseStar {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.25);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.flatpickr-calendar {
-  width: 450px !important;
-  padding: 15px !important;
-  border-radius: 24px !important;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18) !important;
-  border: 2px solid #2e7d32 !important;
-  background: #fbfdfa !important;
-}
-.flatpickr-months .flatpickr-month {
-  height: 45px !important;
-  color: #1b4d1b !important;
-}
-.flatpickr-current-month {
-  font-size: 1.5rem !important;
-  font-weight: 800 !important;
-}
-.flatpickr-current-month .numInputWrapper {
-  width: 75px !important;
-}
-.flatpickr-weekday {
-  font-size: 1rem !important;
-  font-weight: 400 !important;
-  color: #2e7d32 !important;
-}
-.flatpickr-innerContainer {
-  width: 420px !important;
-}
-.flatpickr-rContainer {
-  width: 420px !important;
-}
-.flatpickr-days {
-  width: 420px !important;
-}
-.dayContainer {
-  width: 420px !important;
-  min-width: 420px !important;
-  max-width: 420px !important;
-}
-.flatpickr-day {
-  max-width: 58px !important;
-  height: 52px !important;
-  line-height: 52px !important;
-  font-size: 1rem !important;
-  font-weight: 700 !important;
-  border-radius: 12px !important;
-  margin: 2px !important;
-  color: #1b4d1b !important;
-}
-.flatpickr-day.today {
-  border-color: #2e7d32 !important;
-}
-.flatpickr-day.selected {
-  background: #2e7d32 !important;
-  border-color: #2e7d32 !important;
-  color: white !important;
-}
-.flatpickr-calendar.hasTime {
-  width: 320px !important;
-}
-.flatpickr-time {
-  height: 85px !important;
-  line-height: 85px !important;
-}
-.flatpickr-time input {
-  font-size: 2.2rem !important;
-  font-weight: 800 !important;
-  color: #1b4d1b !important;
-}
-.flatpickr-time .flatpickr-time-separator {
-  font-size: 2.2rem !important;
-  font-weight: 800 !important;
-}
-.flatpickr-calendar.arrowTop:before,
-.flatpickr-calendar.arrowTop:after,
-.flatpickr-calendar.arrowBottom:before,
-.flatpickr-calendar.arrowBottom:after {
-  display: none !important;
-}
-
-.big-picker-input {
-  font-size: 1.35rem !important;
-  font-weight: 700 !important;
-  color: #1b4d1b !important;
-}
-
+/* ========== MANAJEMEN TUGAS ========== */
 .todo-item-custom {
   background: white;
   border-radius: 20px;
@@ -592,6 +528,33 @@ body {
   border-color: #2e7d32;
 }
 
+/* ========== TOMBOL & STATUS ========== */
+.btn-control-custom {
+  background-color: white;
+  color: #556b53;
+  border: 1px solid rgba(46, 125, 50, 0.2);
+  border-radius: 50px;
+  padding: 0.55rem 1.4rem;
+  font-weight: 700;
+  font-size: 0.88rem;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+}
+.btn-control-custom:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(46, 125, 50, 0.1);
+  color: #1f5a2e;
+}
+.btn-status-active {
+  background: linear-gradient(135deg, #2e7d32, #4caf50) !important;
+  border-color: #2e7d32 !important;
+  color: white !important;
+}
+.btn-status-inactive {
+  background: linear-gradient(135deg, #d32f2f, #f44336) !important;
+  border-color: #dc3545 !important;
+  color: white !important;
+}
 .mode-switch {
   background: #e4ede2;
   border-radius: 50px;
@@ -610,41 +573,6 @@ body {
   color: white;
   box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15);
 }
-
-canvas {
-  background: #fef3da;
-  border-radius: 50%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-  cursor: pointer;
-  width: 100%;
-  max-width: 150px;
-  aspect-ratio: 1 / 1;
-  display: block;
-  margin: 0 auto;
-  border: 3px solid white;
-}
-
-.emoji-picker span {
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s;
-  background: white;
-  border-radius: 50px;
-  padding: 5px 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #2e7d32;
-}
-.emoji-picker span:hover,
-.emoji-picker span.active-cursor {
-  background: #c8e6c9;
-  transform: scale(1.05);
-  border: 2px solid #2e7d32;
-}
-
 .status-note-box {
   background: rgba(255, 255, 255, 0.6);
   border-radius: 50px;
@@ -669,7 +597,6 @@ canvas {
   background-color: #dc3545;
   box-shadow: 0 0 8px #ff4d4d;
 }
-
 .streak-badge {
   background: linear-gradient(45deg, #fff1c0, #ffe082);
   border-radius: 50px;
@@ -679,6 +606,8 @@ canvas {
   border: 1px solid rgba(255, 255, 255, 0.6);
   color: #795548;
 }
+
+/* ========== MEMO ========== */
 .memo-date-header {
   font-size: 0.78rem;
   font-weight: 400;
@@ -701,52 +630,105 @@ canvas {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
 }
 
-.big-picker-input {
-  font-size: 1.8rem !important;
-  font-weight: 700 !important;
-  padding: 20px !important;
-  color: #1b4d1b !important;
+/* ========== MODAL TUGAS ========== */
+#formTaskDate, #formTaskTime {
+  height: 45px !important;
+  font-size: 1rem !important;
+  padding: 5px 10px !important;
 }
-
-.big-picker-input::-webkit-calendar-picker-indicator {
-  padding: 10px;
-  cursor: pointer;
-  transform: scale(2.5);
-  margin-right: 15px;
-}
-
-/* Perkecil tinggi dan ukuran teks input */
-#formTaskDate, 
-#formTaskTime {
-    height: 45px !important;    /* Dikurangi dari 70px menjadi 45px */
-    font-size: 1rem !important; /* Ukuran font lebih proporsional */
-    padding: 5px 10px !important;
-}
-
-/* Perkecil ukuran ikon di dalam input */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
-    transform: scale(1.2);      /* Mengecilkan ikon agar tidak terlalu dominan */
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-/* Agar label dan input lebih rapat */
-.modal-body .mb-2 {
-    margin-bottom: 0.5rem !important;
-}
-
-/* Memperbesar ikon kalender dan jam agar mudah diklik */
-input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="time"]::-webkit-calendar-picker-indicator {
-  transform: scale(2);
+  transform: scale(1.2);
   cursor: pointer;
   margin-right: 5px;
 }
-
-/* Memastikan kalender tidak terpotong oleh kotak modal */
 .modal-content {
   overflow: visible !important;
 }
-
-/* ... (sisanya dari kode tampilan.css Anda) ... */
+/* Tambahan kecil jika diperlukan */
+        body {
+            background: linear-gradient(135deg, #e3eedf 0%, #cbdcc3 50%, #b1caa6 100%);
+        }
+        .header-nav-sticky {
+            position: sticky;
+            top: 0;
+            background: rgba(227, 238, 223, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            padding: 12px 15px;
+            margin-left: -15px;
+            margin-right: -15px;
+            border-bottom: 1px solid rgba(46, 125, 50, 0.12);
+            display: flex;
+            flex-direction: column;
+        }
+        @media (min-width: 768px) {
+            .header-nav-sticky {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-left: 0;
+                margin-right: 0;
+                padding: 12px 0;
+            }
+        }
+        .logo-title {
+            background: linear-gradient(135deg, #1b4d1b, #3c8c40);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        @media (min-width: 768px) {
+            .logo-title { font-size: 1.8rem; }
+        }
+        .nav-scroll-container {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            padding: 4px 0;
+        }
+        .nav-scroll-container::-webkit-scrollbar { display: none; }
+        @media (min-width: 768px) {
+            .nav-scroll-container { width: auto; overflow-x: visible; }
+        }
+        .nav-pill-custom {
+            background: white;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            color: #2c3e2f;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.82rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+            cursor: pointer;
+            border: 1px solid rgba(46,125,50,0.05);
+        }
+        .nav-pill-custom.active {
+            background: #2e7d32;
+            color: white !important;
+            box-shadow: 0 8px 15px rgba(46,125,50,0.2);
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(10px);
+            border-radius: 2.2rem;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 15px 35px rgba(31,90,46,0.05);
+            transition: all 0.3s cubic-bezier(0.25,0.8,0.25,1);
+        }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(31,90,46,0.1);
+            border-color: rgba(46,125,50,0.25);
+        }
+        /* Tambahan lain sudah ada di tampilan.css */
