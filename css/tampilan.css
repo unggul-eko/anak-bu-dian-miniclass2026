@@ -646,7 +646,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   overflow: visible !important;
 }
 /* Tambahan kecil jika diperlukan */
-        body {
+        body{
           /*  background: linear-gradient(135deg, #e3eedf 0%, #cbdcc3 50%, #b1caa6 100%);
         }
         .header-nav-sticky {
@@ -732,3 +732,4 @@ input[type="time"]::-webkit-calendar-picker-indicator {
             border-color: rgba(46,125,50,0.25);
         }
         /* Tambahan lain sudah ada di tampilan.css */
+        }

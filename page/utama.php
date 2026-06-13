@@ -14,6 +14,7 @@ session_start();
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/tampilan.css">
+    <link rel="stylesheet" href="pengaturan.css">
 
 </head>
 <body>
@@ -21,19 +22,31 @@ session_start();
 <div class="container py-4 py-md-5">
     
 
-    <!-- Nav Capsule (sticky) -->
-    <div id="navCapsulesGroup" class="header-nav-sticky">
-        <div class="logo-title">PomoStep</div>
-        <div class="nav-scroll-container">
-            <span class="nav-pill-custom active" data-target="dashboard-section"><i class="bi bi-house-door-fill"></i> Beranda</span>
-            <span class="nav-pill-custom" data-target="timer-section"><i class="bi bi-stopwatch-fill"></i> Timer</span>
-            <span class="nav-pill-custom" data-target="tugas-section"><i class="bi bi-card-checklist"></i> Tugas & Kalender</span>
-            <span class="nav-pill-custom" data-target="memo-section"><i class="bi bi-journal-text"></i> Memo</span>
-            <span class="nav-pill-custom" data-target="statistik-section"><i class="bi bi-graph-up-arrow"></i> Statistik</span>
-            <span onclick="window.location.href='/page/statistik.php'" class="badge bg-light text-dark px-3 py-2 rounded-pill shadow-sm"><i class="bi bi-graph-up"></i> Statistik</span>
-            <span class="badge bg-light text-dark px-3 py-2 rounded-pill shadow-sm" id="resetDataBtn" style="cursor:pointer;"><i class="bi bi-arrow-repeat"></i> Pengaturan</span>
-        </div>
+<div id="navCapsulesGroup" class="header-nav-sticky">
+    <div class="logo-title">PomoStep</div>
+    <div class="nav-scroll-container">
+        <span class="nav-pill-custom active" data-target="dashboard-section">
+            <i class="bi bi-house-door-fill"></i> Beranda
+        </span>
+        <span class="nav-pill-custom" data-target="timer-section">
+            <i class="bi bi-stopwatch-fill"></i> Timer
+        </span>
+        <span class="nav-pill-custom" data-target="tugas-section">
+            <i class="bi bi-card-checklist"></i> Tugas & Kalender
+        </span>
+        <span class="nav-pill-custom" data-target="memo-section">
+            <i class="bi bi-journal-text"></i> Memo
+        </span>
+        
+        <a href="statistik.php" class="nav-pill-custom nav-link">
+    <i class="bi bi-graph-up-arrow"></i> Statistik
+</a>
+        
+        <span class="nav-pill-custom" data-bs-toggle="modal" data-bs-target="#pengaturanModal">
+            <i class="bi bi-gear-fill"></i> Pengaturan
+        </span>
     </div>
+</div>
 
     <!-- Dashboard -->
     <div id="dashboard-section" class="scroll-target-marker" style="scroll-margin-top: 150px;">
@@ -239,6 +252,93 @@ session_start();
     </div>
 </div>
 
+<!-- Modal Pengaturan -->
+<div class="modal fade" id="pengaturanModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="bi bi-sliders2"></i> Pengaturan Aplikasi</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Opsi Notifikasi -->
+                <div class="setting-option-item mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-bell-fill text-warning setting-icon"></i>
+                            <span class="fw-bold">Notifikasi Suara</span>
+                            <p class="small text-muted mb-0">Aktifkan bunyi saat timer selesai atau alarm tugas.</p>
+                        </div>
+                        <div class="form-check form-switch form-switch-large">
+                            <input class="form-check-input" type="checkbox" id="soundNotificationToggle" checked>
+                        </div>
+                    </div>
+                </div>
+                <!-- Opsi Mode Gelap -->
+                <div class="setting-option-item mb-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="bi bi-palette-fill text-info setting-icon"></i>
+                            <span class="fw-bold">Mode Gelap (Beta)</span>
+                            <p class="small text-muted mb-0">Ganti tema gelap untuk kenyamanan mata.</p>
+                        </div>
+                        <div class="form-check form-switch form-switch-large">
+                            <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- Zona Berbahaya -->
+                <div class="danger-zone-settings">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <i class="bi bi-trash3-fill text-danger fs-4 me-2"></i>
+                            <span class="fw-bold">Reset Semua Data</span>
+                            <p class="small text-muted mb-0">Hapus semua tugas, memo, statistik, dan pengaturan. Tindakan permanen.</p>
+                        </div>
+                        <button class="btn btn-danger btn-setting-modal" data-bs-toggle="modal" data-bs-target="#confirmResetModal">
+                            <i class="bi bi-eraser-fill"></i> Reset Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Reset (sub-modal) -->
+<div class="modal fade" id="confirmResetModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="bi bi-exclamation-octagon-fill"></i> Konfirmasi Reset Data</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Anda yakin ingin <strong>menghapus semua data</strong>?</p>
+                <ul>
+                    <li>Semua tugas & jadwal akan hilang</li>
+                    <li>Memo fokus akan terhapus</li>
+                    <li>Statistik produktivitas (streak, sesi, menit) akan direset ke 0</li>
+                    <li>Pengaturan akan kembali ke default</li>
+                </ul>
+                <p class="text-danger fw-bold mb-0">Tindakan ini TIDAK dapat dibatalkan!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" id="confirmResetBtn">Ya, Reset Semua Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pastikan memuat pengaturan.js setelah Bootstrap dan skrip.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="skrip.js"></script>
+<script src="pengaturan.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../js/skrip.js"></script>
 </body>
