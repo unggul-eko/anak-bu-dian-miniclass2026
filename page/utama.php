@@ -29,7 +29,7 @@ session_start();
             <span class="nav-pill-custom" data-target="timer-section"><i class="bi bi-stopwatch"></i> Timer</span>
             <span class="nav-pill-custom" data-target="tugas-section"><i class="bi bi-calendar-event"></i> Jadwal &amp; Tugas</span>
             <span class="nav-pill-custom" data-target="memo-section"><i class="bi bi-journal-text"></i> Memo</span>
-            <span onclick="statistik.php"
+            <span onclick="window.location.href='statistik.php'"
             class="nav-pill-custom" data-target="statistik-section"><i class="bi bi-graph-up"></i> Statistik</span>
             <span class="nav-pill-custom" id="resetDataBtn"><i class="bi bi-arrow-repeat"></i> Pengaturan</span>
         </div>
