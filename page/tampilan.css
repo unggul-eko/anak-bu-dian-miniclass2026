@@ -433,62 +433,33 @@ body {
 }
 
 .calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 14px;
-  text-align: center;
-  padding: 15px 5px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* Tetap 7 kolom */
+    gap: 8px;                             /* Jarak antar kotak yang pas */
+    padding: 10px;                        /* Memberi ruang di dalam kontainer */
+    width: 100%;                          /* Mengisi lebar kartu */
+    margin: 0 auto;                       /* Memastikan grid itu sendiri di tengah */
+    justify-items: center;                /* Memastikan tiap cell di tengah kolom */
+    align-items: center;
 }
-.calendar-day-label {
-  font-size: 1.1rem !important;
-  font-weight: 700 !important;
-  color: #43a047 !important;
-  margin-bottom: 5px;
-}
+
 .calendar-cell {
-  position: relative;
-  font-size: 1.45rem !important;
-  font-weight: 800 !important;
-  width: 58px !important;
-  height: 58px !important;
-  margin: 0 auto;
-  border-radius: 16px !important;
-  background: #ffffff;
-  color: #1b4d1b;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid rgba(46, 125, 50, 0.08);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
-}
-@media (min-width: 768px) {
-  .calendar-cell {
-    width: 64px !important;
-    height: 64px !important;
-    font-size: 1.6rem !important;
-  }
-}
-.calendar-cell:hover {
-  background: #e8f5e9;
-  transform: translateY(-3px) scale(1.05);
-  color: #2e7d32;
-  border-color: #2e7d32;
-}
-.calendar-cell.has-event::after {
-  content: "🌟";
-  position: absolute;
-  top: 1px;
-  right: 1px;
-  font-size: 1.1rem;
-  animation: pulseStar 2s infinite;
-}
-.calendar-cell.active-selected {
-  background: linear-gradient(135deg, #2e7d32, #4caf50) !important;
-  color: white !important;
-  box-shadow: 0 8px 16px rgba(46, 125, 50, 0.3);
-  border-color: #2e7d32 !important;
+    aspect-ratio: 1 / 1;                  /* Kotak sempurna */
+    width: 90%;                           /* Memberi sedikit ruang agar tidak terlalu mepet */
+    max-width: 60px;                      /* Batasan agar tidak terlalu besar di layar lebar */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    font-size: 1.2rem;                    /* Ukuran font agar tidak keluar kotak */
+    font-weight: 800;
+    
+    background: #ffffff;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 2px solid rgba(46, 125, 50, 0.08);
+    transition: all 0.2s ease;
 }
 
 @keyframes pulseStar {
@@ -546,8 +517,8 @@ body {
   height: 52px !important;
   line-height: 52px !important;
   font-size: 1rem !important;
-  font-weight: 400 !important;
-  border-radius: 10px !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
   margin: 2px !important;
   color: #1b4d1b !important;
 }
@@ -709,18 +680,18 @@ canvas {
   color: #795548;
 }
 .memo-date-header {
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 0.78rem;
+  font-weight: 400;
   color: white;
   background: #2e7d32;
   padding: 0.35rem 1rem;
   border-radius: 50px;
-  margin-top: 0.75rem;
+  margin-top: 0.78rem;
   display: inline-block;
   box-shadow: 0 4px 8px rgba(46, 125, 50, 0.1);
 }
 .memo-log-item {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   background: white;
   border-left: 4px solid #4caf50;
   padding: 0.6rem 1rem;
@@ -744,29 +715,25 @@ canvas {
   margin-right: 15px;
 }
 
-#formTaskDate,
+/* Perkecil tinggi dan ukuran teks input */
+#formTaskDate, 
 #formTaskTime {
-  height: 70px !important;
-  font-size: 1.8rem !important;
+    height: 45px !important;    /* Dikurangi dari 70px menjadi 45px */
+    font-size: 1rem !important; /* Ukuran font lebih proporsional */
+    padding: 5px 10px !important;
 }
 
-/* ... (kode Anda yang sebelumnya ada di atas) ... */
-
-/* --- REVISI: Perbaikan UI Picker di dalam Modal --- */
-
-/* Memastikan modal tidak memotong elemen yang muncul di atasnya */
-.modal-body {
-  overflow: visible !important;
+/* Perkecil ukuran ikon di dalam input */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    transform: scale(1.2);      /* Mengecilkan ikon agar tidak terlalu dominan */
+    cursor: pointer;
+    margin-right: 5px;
 }
 
-/* Membuat Input Date & Time lebih besar dan mudah ditekan */
-input[type="date"],
-input[type="time"] {
-  cursor: pointer;
-  padding: 15px !important;
-  font-size: 1.5rem !important;
-  height: 70px !important;
-  border: 2px solid #2e7d32 !important;
+/* Agar label dan input lebih rapat */
+.modal-body .mb-2 {
+    margin-bottom: 0.5rem !important;
 }
 
 /* Memperbesar ikon kalender dan jam agar mudah diklik */

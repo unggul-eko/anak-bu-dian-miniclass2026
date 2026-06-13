@@ -75,60 +75,148 @@ function drawEye(
 }
 
 function drawFrog(mx, my) {
-  ctx.fillStyle = "#6B8E23";
-  ctx.beginPath();
-  ctx.ellipse(90, 100, 52, 45, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#556B2F";
-  ctx.beginPath();
-  ctx.ellipse(90, 112, 38, 28, 0, 0, Math.PI * 2);
-  ctx.fill();
-  drawEye(66, 68, 15, 6, mx, my);
-  drawEye(114, 68, 15, 6, mx, my);
-  ctx.beginPath();
-  ctx.arc(90, 95, 18, 0.1, Math.PI - 0.1);
-  ctx.strokeStyle = "#3A2A1A";
-  ctx.lineWidth = 2;
-  ctx.stroke();
+    // 1. BADAN/KEPALA UTAMA (Dibuat sedikit lebih bulat dan menggemaskan)
+    ctx.fillStyle = "#6B8E23"; 
+    ctx.beginPath(); 
+    ctx.ellipse(100, 110, 55, 50, 0, 0, Math.PI * 2); 
+    ctx.fill();
+
+    // 2. PERUT (Warna cream/kuning muda soft biasanya jauh lebih imut daripada hijau tua)
+    ctx.fillStyle = "#FFFDD0"; 
+    ctx.beginPath(); 
+    ctx.ellipse(100, 125, 35, 25, 0, 0, Math.PI * 2); 
+    ctx.fill();
+
+    // 3. PIPI MERONA / BLUSH (Efek blush pink transparan di kanan & kiri)
+    ctx.fillStyle = "rgba(255, 105, 180, 0.4)"; // Pink soft dengan opacity
+    ctx.beginPath();
+    ctx.arc(60, 110, 10, 0, Math.PI * 2); // Pipi kiri
+    ctx.arc(140, 110, 10, 0, Math.PI * 2); // Pipi kanan
+    ctx.fill();
+
+    // 4. MATA (Tetap memanggil fungsi drawEye bawaanmu)
+    drawEye(75, 75, 17, 7, mx, my); 
+    drawEye(125, 75, 17, 7, mx, my);
+
+    // 5. MULUT (Senyum melengkung manis ala karakter kartun)
+    ctx.beginPath(); 
+    ctx.arc(100, 105, 15, 0, Math.PI); // Lengkungan senyum yang lebih pas
+    ctx.strokeStyle = "#3A2A1A"; 
+    ctx.lineWidth = 3; // Sedikit lebih tebal agar terlihat tegas dan lucu
+    ctx.lineCap = "round"; // Ujung garis mulut dibuat membulat (tidak tajam)
+    ctx.stroke();
 }
 function drawCat(mx, my) {
-  ctx.fillStyle = "#F4A261";
-  ctx.beginPath();
-  ctx.ellipse(90, 100, 48, 45, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#E76F51";
-  ctx.beginPath();
-  ctx.moveTo(52, 62);
-  ctx.lineTo(66, 35);
-  ctx.lineTo(80, 62);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(128, 62);
-  ctx.lineTo(114, 35);
-  ctx.lineTo(100, 62);
-  ctx.fill();
-  drawEye(63, 73, 14, 5, mx, my);
-  drawEye(117, 73, 14, 5, mx, my);
-  ctx.fillStyle = "#D95B43";
-  ctx.beginPath();
-  ctx.arc(90, 88, 4, 0, 2 * Math.PI);
-  ctx.fill();
+    // 1. KEPALA UTAMA (Tetap)
+    ctx.fillStyle = "#F4A261"; 
+    ctx.beginPath(); 
+    ctx.ellipse(100, 110, 50, 48, 0, 0, Math.PI * 2); 
+    ctx.fill();
+
+    // 2. TELINGA LUAR (Perbaikan Koordinat & Bentuk agar menyatu natural)
+    ctx.fillStyle = "#E76F51"; 
+    
+    // Telinga Kiri - Alas diperlebar dan diturunkan
+    ctx.beginPath(); 
+    ctx.moveTo(50, 85);   // TITIK BARU: Lebih rendah di samping kepala
+    ctx.lineTo(65, 35);   // Ujung telinga tetap
+    ctx.lineTo(90, 75);   // TITIK BARU: Lebih lebar ke arah tengah kepala
+    ctx.fill(); 
+
+    // Telinga Kanan - Alas diperlebar dan diturunkan
+    ctx.beginPath(); 
+    ctx.moveTo(150, 85);  // TITIK BARU: Lebih rendah di samping kepala
+    ctx.lineTo(135, 35);  // Ujung telinga tetap
+    ctx.lineTo(110, 75);  // TITIK BARU: Lebih lebar ke arah tengah kepala
+    ctx.fill();
+
+    // 3. TELINGA DALAM (Disesuaikan posisinya mengikuti telinga luar baru)
+    ctx.fillStyle = "#FFB6C1"; 
+    
+    // Telinga Dalam Kiri
+    ctx.beginPath(); 
+    ctx.moveTo(56, 82);   // Disesuaikan
+    ctx.lineTo(67, 43);   // Tetap
+    ctx.lineTo(84, 73);   // Disesuaikan
+    ctx.fill();
+    
+    // Telinga Dalam Kanan
+    ctx.beginPath(); 
+    ctx.moveTo(144, 82);  // Disesuaikan
+    ctx.lineTo(133, 43);  // Tetap
+    ctx.lineTo(116, 73);  // Disesuaikan
+    ctx.fill();
+
+    // 4. PIPI MERONA (Tetap)
+    ctx.fillStyle = "rgba(231, 111, 81, 0.35)";
+    ctx.beginPath();
+    ctx.arc(60, 115, 8, 0, Math.PI * 2); 
+    ctx.arc(140, 115, 8, 0, Math.PI * 2); 
+    ctx.fill();
+
+    // 5. MATA (Tetap)
+    drawEye(75, 85, 14, 6, mx, my); 
+    drawEye(125, 85, 14, 6, mx, my);
+
+    // 6. HIDUNG (Tetap)
+    ctx.fillStyle = "#E76F51"; 
+    ctx.beginPath(); 
+    ctx.moveTo(96, 100); ctx.lineTo(104, 100); ctx.lineTo(100, 104); 
+    ctx.fill();
+
+    // 7. MULUT IMUT (Tetap)
+    ctx.strokeStyle = "#4A3525"; 
+    ctx.lineWidth = 2.5; 
+    ctx.lineCap = "round";
+    
+    ctx.beginPath(); 
+    ctx.arc(94, 104, 6, 0.1, Math.PI - 0.2); 
+    ctx.stroke();
+    
+    ctx.beginPath(); 
+    ctx.arc(106, 104, 6, 0.2, Math.PI - 0.1); 
+    ctx.stroke();
 }
 function drawDog(mx, my) {
-  ctx.fillStyle = "#D4A373";
-  ctx.beginPath();
-  ctx.ellipse(90, 100, 50, 45, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = "#B97F44";
-  ctx.beginPath();
-  ctx.ellipse(90, 114, 34, 26, 0, 0, Math.PI * 2);
-  ctx.fill();
-  drawEye(66, 78, 13, 5, mx, my);
-  drawEye(114, 78, 13, 5, mx, my);
-  ctx.fillStyle = "#6B3E1C";
-  ctx.beginPath();
-  ctx.arc(90, 94, 6, 0, 2 * Math.PI);
-  ctx.fill();
+    // 1. KEPALA UTAMA (Warna cokelat muda hangat)
+    ctx.fillStyle = "#D4A373"; 
+    ctx.beginPath(); 
+    ctx.ellipse(100, 110, 52, 48, 0, 0, Math.PI * 2); 
+    ctx.fill();
+
+    // 2. TELINGA TERKULAI / FLOPPY EARS (Kiri & Kanan, dibuat jatuh ke bawah di samping kepala)
+    ctx.fillStyle = "#A26E3A"; // Cokelat yang lebih tua dari kepala
+    ctx.beginPath(); ctx.ellipse(45, 115, 14, 28, Math.PI / 12, 0, Math.PI * 2); ctx.fill(); // Telinga kiri
+    ctx.beginPath(); ctx.ellipse(155, 115, 14, 28, -Math.PI / 12, 0, Math.PI * 2); ctx.fill(); // Telinga kanan
+
+    // 3. MONCONG / SNOUT (Dibuat putih/cream agar hidung & mulut lebih menonjol lucu)
+    ctx.fillStyle = "#FEFAE0"; 
+    ctx.beginPath(); 
+    ctx.ellipse(100, 118, 22, 16, 0, 0, Math.PI * 2); 
+    ctx.fill();
+
+    // 4. PIPI MERONA / BLUSH
+    ctx.fillStyle = "rgba(233, 196, 106, 0.4)"; // Blush hangat kekuningan/oranye soft
+    ctx.beginPath();
+    ctx.arc(62, 115, 8, 0, Math.PI * 2); // Pipi kiri
+    ctx.arc(138, 115, 8, 0, Math.PI * 2); // Pipi kanan
+    ctx.fill();
+
+    // 5. MATA (Tetap memanggil fungsi drawEye bawaanmu)
+    drawEye(75, 85, 14, 6, mx, my); 
+    drawEye(125, 85, 14, 6, mx, my);
+
+    // 6. LIDAH MELET (Efek menjulur imut di bawah hidung)
+    ctx.fillStyle = "#FF7B94"; // Pink lidah
+    ctx.beginPath();
+    ctx.arc(100, 122, 7, 0, Math.PI); // Setengah lingkaran menghadap bawah
+    ctx.fill();
+
+    // 7. HIDUNG (Bentuk oval horizontal kecil, diletakkan tepat di atas lidah)
+    ctx.fillStyle = "#4A2810"; 
+    ctx.beginPath(); 
+    ctx.ellipse(100, 112, 9, 6, 0, 0, Math.PI * 2); 
+    ctx.fill();
 }
 function drawPet() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);

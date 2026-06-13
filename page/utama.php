@@ -229,12 +229,12 @@ session_start();
                 <p class="text-muted small mb-3" style="font-size:0.75rem;"><i class="bi bi-info-circle"></i> Tanggal ber-bintang <span class="text-warning fw-bold">🌟</span> memiliki jadwal tugas / kuliah aktif.</p>
                 
                 <div class="calendar-grid" id="calendarDaysContainer">
-                    <div class="calendar-day-label small fw-bold text-muted">Min</div>
-                    <div class="calendar-day-label small fw-bold text-muted">Sen</div>
-                    <div class="calendar-day-label small fw-bold text-muted">Sel</div>
-                    <div class="calendar-day-label small fw-bold text-muted">Rab</div>
-                    <div class="calendar-day-label small fw-bold text-muted">Kam</div>
-                    <div class="calendar-day-label small fw-bold text-muted">Jum</div>
+                    <div class="calendar-day-label fw-bold text-muted">Min</div>
+                    <div class="calendar-day-label fw-bold text-muted">Sen</div>
+                    <div class="calendar-day-label fw-bold text-muted">Sel</div>
+                    <div class="calendar-day-label fw-bold text-muted">Rab</div>
+                    <div class="calendar-day-label fw-bold text-muted">Kam</div>
+                    <div class="calendar-day-label fw-bold text-muted">Jum</div>
                     <div class="calendar-day-label small fw-bold text-muted">Sab</div>
                 </div>
             </div>
