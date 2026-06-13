@@ -10,29 +10,31 @@ body {
   transition: cursor 0.1s ease;
 }
 
-/* ========== HEADER STICKY ========== */
+/* ========== HEADER STICKY (FULL WIDTH AMAN) ========== */
 .header-nav-sticky {
   position: sticky;
-  top: 0;
-  /* background: rgba(227, 238, 223, 0.92); */
-  /* backdrop-filter: blur(12px); */
+  top: 0px;
+  background: rgba(227, 238, 223, 0.92);
+  backdrop-filter: blur(12px);
   z-index: 1000;
-  padding: 12px 15px;
-  margin-left: -15px;
-  margin-right: -15px;
-  /* border-bottom: 1px solid rgba(46, 125, 50, 0.12); */
+  
+  /*Ubah padding atas-bawah dari 12px menjadi 16px atau 18px */
+  padding: 16px 20px; 
+  
+  border-bottom: 1px solid rgba(46, 125, 50, 0.12);
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  box-sizing: border-box;
 }
 @media (min-width: 768px) {
   .header-nav-sticky {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-left: 0;
-    margin-right: 0;
-    /* border-bottom: 1px solid rgba(46, 125, 50, 0.25); */
-    padding: 12px 0;
+    padding: 12px 30px;
   }
 }
 
@@ -41,8 +43,9 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 800;
+  white-space: nowrap;
 }
 @media (min-width: 768px) {
   .logo-title {
@@ -50,23 +53,73 @@ body {
   }
 }
 
-/* ========== NAVIGASI PILL ========== */
+/* Tombol Hamburger (hanya tampil di mobile) */
+.hamburger-menu {
+  display: none;
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: #2e7d32;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.hamburger-menu:hover {
+  opacity: 0.8;
+}
+@media (max-width: 767px) {
+  .hamburger-menu {
+    display: block;
+  }
+}
+
+/* Container navigasi pill */
 .nav-scroll-container {
   display: flex;
   gap: 0.5rem;
   overflow-x: auto;
-  scrollbar-width: none;
+  scrollbar-width: thin;
   -webkit-overflow-scrolling: touch;
   width: 100%;
-  padding: 4px 0;
+  padding: 8px 0;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
 }
-.nav-scroll-container::-webkit-scrollbar {
-  display: none;
-}
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   .nav-scroll-container {
-    width: auto;
     overflow-x: visible;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+/* Mode mobile: navigasi disembunyikan sampai hamburger diklik */
+@media (max-width: 767px) {
+  .nav-scroll-container {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(227, 238, 223, 0.98);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 1rem;
+    border-top: 1px solid rgba(46,125,50,0.2);
+    border-bottom: 1px solid rgba(46,125,50,0.2);
+    z-index: 1050;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  .nav-scroll-container.show {
+    display: flex;
+  }
+  .nav-pill-custom {
+    width: 100%;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+  }
+  .header-nav-sticky {
+    position: relative; /* agar absolute menu terikat */
   }
 }
 
@@ -645,91 +698,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .modal-content {
   overflow: visible !important;
 }
-/* Tambahan kecil jika diperlukan */
-        body{
-          /*  background: linear-gradient(135deg, #e3eedf 0%, #cbdcc3 50%, #b1caa6 100%);
-        }
-        .header-nav-sticky {
-            position: sticky;
-            top: 0;
-            background: rgba(227, 238, 223, 0.92);
-            backdrop-filter: blur(12px);
-            z-index: 1000;
-            padding: 12px 15px;
-            margin-left: -15px;
-            margin-right: -15px;
-            border-bottom: 1px solid rgba(46, 125, 50, 0.12);
-            display: flex;
-            flex-direction: column;
-        }
-        @media (min-width: 768px) {
-            .header-nav-sticky {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                margin-left: 0;
-                margin-right: 0;
-                padding: 12px 0;
-            }
-        }
-        .logo-title {
-            background: linear-gradient(135deg, #1b4d1b, #3c8c40);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-size: 1.5rem;
-            font-weight: 800;
-        }
-        @media (min-width: 768px) {
-            .logo-title { font-size: 1.8rem; }
-        }
-        .nav-scroll-container {
-            display: flex;
-            gap: 0.5rem;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-            width: 100%;
-            padding: 4px 0;
-        }
-        .nav-scroll-container::-webkit-scrollbar { display: none; }
-        @media (min-width: 768px) {
-            .nav-scroll-container { width: auto; overflow-x: visible; }
-        }
-        .nav-pill-custom {
-            background: white;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            color: #2c3e2f;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.82rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
-            transition: all 0.25s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.3rem;
-            white-space: nowrap;
-            cursor: pointer;
-            border: 1px solid rgba(46,125,50,0.05);
-        }
-        .nav-pill-custom.active {
-            background: #2e7d32;
-            color: white !important;
-            box-shadow: 0 8px 15px rgba(46,125,50,0.2);
-        }
-        .glass-card {
-            background: rgba(255,255,255,0.88);
-            backdrop-filter: blur(10px);
-            border-radius: 2.2rem;
-            border: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 15px 35px rgba(31,90,46,0.05);
-            transition: all 0.3s cubic-bezier(0.25,0.8,0.25,1);
-        }
-        .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(31,90,46,0.1);
-            border-color: rgba(46,125,50,0.25);
-        }
-        /* Tambahan lain sudah ada di tampilan.css */
-        }
+.logo-img {
+    height: 60px;      /* sebelumnya 38px */
+    width: auto;
+    object-fit: contain;
+}
+@media (max-width: 576px) {
+    .logo-img {
+        height: 45px;   /* sebelumnya 30px */
+    }
+}

@@ -15,15 +15,10 @@ session_start();
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/tampilan.css">
     <link rel="stylesheet" href="pengaturan.css">
-
-</head>
-<body>
-
-<div class="container py-4 py-md-5">
-    
-
-<div id="navCapsulesGroup" class="header-nav-sticky">
-    <div class="logo-title">PomoStep</div>
+    <div id="navCapsulesGroup" class="header-nav-sticky">
+    <div class="logo-title">
+        <img src="../assets/logo.png" alt="PomoStep Logo" class="logo-img">
+    </div>
     <div class="nav-scroll-container">
         <span class="nav-pill-custom active" data-target="dashboard-section">
             <i class="bi bi-house-door-fill"></i> Beranda
@@ -39,14 +34,18 @@ session_start();
         </span>
         
         <a href="statistik.php" class="nav-pill-custom nav-link">
-    <i class="bi bi-graph-up-arrow"></i> Statistik
-</a>
+            <i class="bi bi-graph-up-arrow"></i> Statistik
+        </a>
         
         <span class="nav-pill-custom" data-bs-toggle="modal" data-bs-target="#pengaturanModal">
             <i class="bi bi-gear-fill"></i> Pengaturan
         </span>
     </div>
 </div>
+</head>
+<body>
+
+<div class="container py-4 py-md-5">
 
     <!-- Dashboard -->
     <div id="dashboard-section" class="scroll-target-marker" style="scroll-margin-top: 150px;">
@@ -335,7 +334,6 @@ session_start();
     </div>
 </div>
 
-<!-- Pastikan memuat pengaturan.js setelah Bootstrap dan skrip.js -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="skrip.js"></script>
 <script src="pengaturan.js"></script>

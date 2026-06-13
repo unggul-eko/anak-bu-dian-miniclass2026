@@ -13,15 +13,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <!-- CSS Eksternal -->
     <link rel="stylesheet" href="../css/statistik.css">
-</head>
-<body>
-
-<div class="container py-4 py-md-5">
-    <!-- HEADER SAMA DENGAN UTAMA.PHP -->
+       <!-- HEADER dengan LOGO -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom border-success border-opacity-25">
         <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-lightning-charge-fill text-success fs-2"></i>
-            <h1 class="display-6 fw-bold" style="background: linear-gradient(135deg,#1b4d1b,#3c8c40); -webkit-background-clip:text; background-clip:text; color:transparent;">PomoStep</h1>
+            <!-- Logo ditampilkan di sini -->
+            <img src="../assets/logo.png" alt="PomoStep Logo" class="logo-img-stat">
             <span class="badge bg-success ms-2">Statistik</span>
         </div>
         <div class="d-flex gap-2 flex-wrap">
@@ -30,6 +26,10 @@
             </a>
         </div>
     </div>
+</head>
+<body>
+
+<div class="container py-4 py-md-5">
 
     <!-- 4 KARTU STATISTIK UTAMA -->
     <div class="row g-4 mb-5">

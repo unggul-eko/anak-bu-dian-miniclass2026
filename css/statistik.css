@@ -91,3 +91,13 @@ hr {
     .stat-value { font-size: 2rem; }
     .stat-icon { width: 55px; height: 55px; font-size: 2rem; }
 }
+.logo-img-stat {
+    height: 60px;      /* sebelumnya 45px */
+    width: auto;
+    object-fit: contain;
+}
+@media (max-width: 576px) {
+    .logo-img-stat {
+        height: 50px;   /* sebelumnya 35px */
+    }
+}

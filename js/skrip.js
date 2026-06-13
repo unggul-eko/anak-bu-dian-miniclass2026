@@ -1,4 +1,38 @@
-// ========== PET DAN KURSOR INTERAKTIF ==========
+// ==========================================
+// GLOBALS & STATE MANAGEMENT
+// ==========================================
+let timerInterval = null;
+let isRunning = false;
+let isPaused = false;
+let currentMode = "focus"; // "focus" atau "break"
+
+let userFocusSeconds = 0;
+let userBreakSeconds = 0;
+let currentSeconds = 0;
+let totalDurationInMode = 0;
+
+let lockedHour = 0;
+let lockedMin = 0;
+let lockedSec = 0;
+
+let stats = {
+  activeBreakCompleted: 0,
+  focusMinutesTotal: 0,
+  weeklyStreak: 0,
+  lastStreakDate: null,
+  totalFocusSessionsToday: 0,
+  memos: [],
+  customMaxMenit: 0,
+  customMaxTugas: 0
+};
+
+let tasks = [];
+const todayObj = new Date();
+let selectedFilterDate = `${todayObj.getFullYear()}-${(todayObj.getMonth()+1).toString().padStart(2,'0')}-${todayObj.getDate().toString().padStart(2,'0')}`;
+
+// ==========================================
+// INTERACTIVE PET & CURSOR MODULE
+// ==========================================
 const petQuotes = {
   focus: ["Fokus ya! Jangan buka sosmed dulu! 🤫", "Wah kamu keren banget, lanjutin! 🔥", "Aku mengawasimu belajar, semangat! 🎯"],
   break: ["Waktunya peregangan otot dulu! ☕", "Minum air putih dulu sana! 🚰"],
@@ -7,7 +41,7 @@ const petQuotes = {
 
 function updatePetSpeech(type) {
   const bubble = document.getElementById("petBubbleChat");
-  if(bubble) bubble.innerText = petQuotes[type][Math.floor(Math.random() * petQuotes[type].length)];
+  if (bubble) bubble.innerText = petQuotes[type][Math.floor(Math.random() * petQuotes[type].length)];
 }
 
 const animalCursors = {
@@ -16,49 +50,48 @@ const animalCursors = {
   dog: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px'><text y='24'>🐶</text></svg>",
 };
 
-const canvas = document.getElementById("petCanvas");
-const ctx = canvas.getContext("2d");
+// Variabel Khusus HTML5 Canvas Pet
+const petCanvas = document.getElementById("petCanvas");
+const petCtx = petCanvas ? petCanvas.getContext("2d") : null;
 let currentAnimal = "frog";
 let targetX = 90, targetY = 90;
 
-document.addEventListener("mousemove", (e) => {
-  if(!canvas) return;
-  const rect = canvas.getBoundingClientRect();
-  targetX = (e.clientX - rect.left) * (canvas.width / rect.width);
-  targetY = (e.clientY - rect.top) * (canvas.height / rect.height);
-  drawPet();
-});
+// Mouse Tracking khusus untuk Canvas Pet
+if (petCanvas) {
+  window.addEventListener("mousemove", (e) => {
+    const rect = petCanvas.getBoundingClientRect();
+    targetX = (e.clientX - rect.left) * (petCanvas.width / rect.width);
+    targetY = (e.clientY - rect.top) * (petCanvas.height / rect.height);
+    drawPet();
+  });
+}
 
-function drawEye(centerX, centerY, eyeRadius, pupilRadius, mx, my, isPanda = false) {
-  if (isPanda) {
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, eyeRadius + 5, 0, 2 * Math.PI);
-    ctx.fillStyle = "#2c2c2c";
-    ctx.fill();
-  }
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, eyeRadius, 0, 2 * Math.PI);
-  ctx.fillStyle = "#FFFFFF";
-  ctx.fill();
-  ctx.strokeStyle = "#2c3e2f";
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
+function drawEye(centerX, centerY, eyeRadius, pupilRadius, mx, my) {
+  if (!petCtx) return;
+  petCtx.beginPath();
+  petCtx.arc(centerX, centerY, eyeRadius, 0, 2 * Math.PI);
+  petCtx.fillStyle = "#FFFFFF";
+  petCtx.fill();
+  petCtx.strokeStyle = "#2c3e2f";
+  petCtx.lineWidth = 1.5;
+  petCtx.stroke();
+  
   let dx = mx - centerX, dy = my - centerY;
   let angle = Math.atan2(dy, dx);
   let distance = Math.min(eyeRadius - pupilRadius - 1.5, Math.hypot(dx, dy) * 0.15);
-  ctx.beginPath();
-  ctx.arc(centerX + Math.cos(angle) * distance, centerY + Math.sin(angle) * distance, pupilRadius, 0, 2 * Math.PI);
-  ctx.fillStyle = isPanda ? "#000000" : "#1f2e1c";
-  ctx.fill();
+  
+  petCtx.beginPath();
+  petCtx.arc(centerX + Math.cos(angle) * distance, centerY + Math.sin(angle) * distance, pupilRadius, 0, 2 * Math.PI);
+  petCtx.fillStyle = "#1f2e1c";
+  petCtx.fill();
 }
 
 function drawPet() {
-  if(!ctx) return;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!petCtx || !petCanvas) return;
+  petCtx.clearRect(0, 0, petCanvas.width, petCanvas.height);
   
-  // Menentukan titik tengah canvas secara otomatis
-  const cx = canvas.width / 2;
-  const cy = canvas.height / 2;
+  const cx = petCanvas.width / 2;
+  const cy = petCanvas.height / 2;
 
   if (currentAnimal === "frog") drawFrog(targetX, targetY, cx, cy);
   else if (currentAnimal === "cat") drawCat(targetX, targetY, cx, cy);
@@ -66,46 +99,235 @@ function drawPet() {
 }
 
 function drawFrog(mx, my, cx, cy) {
-  ctx.fillStyle = "#6B8E23"; ctx.beginPath(); ctx.ellipse(cx, cy, 50, 45, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#FFFDD0"; ctx.beginPath(); ctx.ellipse(cx, cy + 15, 30, 20, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "rgba(255, 105, 180, 0.4)";
-  ctx.beginPath(); ctx.arc(cx - 35, cy, 8, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(cx + 35, cy, 8, 0, Math.PI*2); ctx.fill();
-  drawEye(cx - 20, cy - 25, 15, 6, mx, my); drawEye(cx + 20, cy - 25, 15, 6, mx, my);
-  ctx.beginPath(); ctx.arc(cx, cy - 5, 12, 0, Math.PI);
-  ctx.strokeStyle = "#3A2A1A"; ctx.lineWidth = 3; ctx.lineCap = "round"; ctx.stroke();
+  if (!petCtx) return; // Menggunakan petCtx sesuai dengan cuplikan kode terakhirmu
+
+  // --- 1. BAYANGAN LEMBUT (Biar kelihatan menapak bumi) ---
+  petCtx.fillStyle = "rgba(0, 0, 0, 0.08)";
+  petCtx.beginPath();
+  petCtx.ellipse(cx, cy + 50, 60, 15, 0, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // --- 2. KAKI BELAKANG & BADAN UTAMA (Gembul & Bulat) ---
+  // Kaki belakang samar di kiri-kanan bawah badan
+  petCtx.fillStyle = "#A3B18A"; // Hijau zaitun muda soft sesuai gambar
+  petCtx.beginPath(); petCtx.arc(cx - 45, cy + 35, 20, 0, Math.PI * 2); petCtx.fill();
+  petCtx.beginPath(); petCtx.arc(cx + 45, cy + 35, 20, 0, Math.PI * 2); petCtx.fill();
+
+  // Badan Utama (Oval gemuk agak miring ke bawah sedikit)
+  petCtx.fillStyle = "#A3B18A";
+  petCtx.beginPath();
+  petCtx.ellipse(cx, cy + 10, 65, 52, Math.PI / 180 * 2, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // --- 3. CORAK BINTIK PUNGGUNG (Spotted Pattern) ---
+  petCtx.fillStyle = "#4F5D2F"; // Hijau tua untuk bintik-bintik
+  // Bintik di punggung atas/samping kiri
+  petCtx.beginPath(); petCtx.ellipse(cx - 40, cy - 15, 8, 12, Math.PI / 4, 0, Math.PI * 2); petCtx.fill();
+  petCtx.beginPath(); petCtx.arc(cx - 50, cy + 5, 5, 0, Math.PI * 2); petCtx.fill();
+  // Bintik di punggung atas/samping kanan
+  petCtx.beginPath(); petCtx.ellipse(cx + 45, cy - 10, 12, 10, -Math.PI / 6, 0, Math.PI * 2); petCtx.fill();
+  petCtx.beginPath(); petCtx.arc(cx + 35, cy + 15, 6, 0, Math.PI * 2); petCtx.fill();
+
+  // --- 4. PERUT KREM/LEMOT (Drawn inside using clipping or strategic layering) ---
+  petCtx.fillStyle = "#EAE2B7"; // Krem hangat pekat untuk perut bawah
+  petCtx.beginPath();
+  petCtx.ellipse(cx, cy + 30, 45, 28, 0, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // --- 5. BLUSH PINK LEMBUT (Pipi estetik bawah mata) ---
+  petCtx.fillStyle = "rgba(255, 105, 180, 0.5)";
+  petCtx.beginPath(); petCtx.ellipse(cx - 38, cy + 0, 12, 8, 0, 0, Math.PI * 2); petCtx.fill();
+  petCtx.beginPath(); petCtx.ellipse(cx + 38, cy + 0, 12, 8, 0, 0, Math.PI * 2); petCtx.fill();
+
+  // --- 6. MATA RAKSASA MELIRIK (Gaya Desert Rain Frog) ---
+  // Posisi mata katak ini agak menonjol ke atas luar kepala
+  drawDesertFrogEye(cx - 28, cy - 25, mx, my);
+  drawDesertFrogEye(cx + 28, cy - 25, mx, my);
+
+  // --- 7. HIDUNG & MULUT MINIMALIS ---
+  // Garis mulut datar/sedikit melengkung kecil khas katak pasrah
+  petCtx.strokeStyle = "#3D405B"; 
+  petCtx.lineWidth = 2.5;
+  petCtx.lineCap = "round";
+  
+  // Garis mulut kecil tepat di tengah di antara mata bawah
+  petCtx.beginPath(); 
+  petCtx.arc(cx, cy - 2, 4, 0.2, Math.PI - 0.2); 
+  petCtx.stroke();
+}
+
+// Fungsi pembantu khusus mata katak referensi (Iris Kuning tebal + Pupil Hitam Raksasa)
+function drawDesertFrogEye(ecx, ecy, mx, my) {
+  // 1. Outline/Kelopak luar mata hijau
+  petCtx.fillStyle = "#A3B18A";
+  petCtx.beginPath();
+  petCtx.arc(ecx, ecy, 20, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // 2. Iris Kuning/Oranye Terang tebal
+  petCtx.fillStyle = "#F4A261"; // Oranye/kuning hangat pastel
+  petCtx.beginPath();
+  petCtx.arc(ecx, ecy, 17, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // Lingkaran dalam kuning terang mendominasi sebelum pupil
+  petCtx.fillStyle = "#E9C46A"; 
+  petCtx.beginPath();
+  petCtx.arc(ecx, ecy, 15, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // Hitung lirikan pointer mouse
+  let angle = Math.atan2(my - ecy, mx - ecx);
+  let dist = Math.min(Math.sqrt(Math.pow(mx - ecx, 2) + Math.pow(my - ecy, 2)), 2.5); // Gerakan pupil smooth kecil
+  let pupilX = ecx + Math.cos(angle) * dist;
+  let pupilY = ecy + Math.sin(angle) * dist;
+
+  // 3. Pupil Hitam Raksasa (Sangat bulat dan besar)
+  petCtx.fillStyle = "#1D1E2C";
+  petCtx.beginPath();
+  petCtx.arc(pupilX, pupilY, 11, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // 4. Pantulan Cahaya Putih (Binar mata kecil di pojok atas)
+  petCtx.fillStyle = "#FFFFFF";
+  petCtx.beginPath();
+  petCtx.arc(pupilX - 4, pupilY - 4, 2.5, 0, Math.PI * 2);
+  petCtx.fill();
 }
 
 function drawCat(mx, my, cx, cy) {
-  ctx.fillStyle = "#F4A261"; ctx.beginPath(); ctx.ellipse(cx, cy, 45, 42, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#E76F51";
-  ctx.beginPath(); ctx.moveTo(cx - 45, cy - 25); ctx.lineTo(cx - 30, cy - 75); ctx.lineTo(cx - 5, cy - 35); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(cx + 45, cy - 25); ctx.lineTo(cx + 30, cy - 75); ctx.lineTo(cx + 5, cy - 35); ctx.fill();
-  ctx.fillStyle = "rgba(231, 111, 81, 0.35)";
-  ctx.beginPath(); ctx.arc(cx - 30, cy + 5, 8, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(cx + 30, cy + 5, 8, 0, Math.PI*2); ctx.fill();
-  drawEye(cx - 20, cy - 10, 12, 5, mx, my); drawEye(cx + 20, cy - 10, 12, 5, mx, my);
-  ctx.fillStyle = "#E76F51"; ctx.beginPath(); ctx.moveTo(cx - 5, cy + 5); ctx.lineTo(cx + 5, cy + 5); ctx.lineTo(cx, cy + 9); ctx.fill();
-  ctx.strokeStyle = "#4A3525"; ctx.lineWidth = 2.5; ctx.lineCap = "round";
-  ctx.beginPath(); ctx.arc(cx - 7, cy + 9, 6, 0.1, Math.PI - 0.2); ctx.stroke();
-  ctx.beginPath(); ctx.arc(cx + 7, cy + 9, 6, 0.2, Math.PI - 0.1); ctx.stroke();
+  if (!petCtx) return;
+  // Badan Gembul
+  petCtx.fillStyle = "#222222"; 
+  petCtx.beginPath();
+  petCtx.moveTo(cx - 80, cy + 130); 
+  petCtx.quadraticCurveTo(cx - 90, cy + 30, cx - 50, cy + 10);
+  petCtx.lineTo(cx + 50, cy + 10);
+  petCtx.quadraticCurveTo(cx + 90, cy + 30, cx + 80, cy + 130);
+  petCtx.closePath();
+  petCtx.fill();
+
+  // Kepala Bulat
+  petCtx.fillStyle = "#151515"; 
+  petCtx.beginPath();
+  petCtx.ellipse(cx, cy, 65, 55, 0, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // Telinga Kiri & Kanan
+  petCtx.fillStyle = "#151515";
+  petCtx.beginPath(); petCtx.moveTo(cx - 55, cy - 20); petCtx.quadraticCurveTo(cx - 60, cy - 75, cx - 25, cy - 45); petCtx.fill();
+  petCtx.beginPath(); petCtx.moveTo(cx + 55, cy - 20); petCtx.quadraticCurveTo(cx + 60, cy - 75, cx + 25, cy - 45); petCtx.fill();
+
+  // Mata Hijau Kucing
+  drawCuteGreenEye(cx - 28, cy - 10, mx, my);
+  drawCuteGreenEye(cx + 28, cy - 10, mx, my);
+
+  // Mulut 'w'
+  petCtx.strokeStyle = "#000000"; petCtx.lineWidth = 3; petCtx.lineCap = "round";
+  petCtx.beginPath(); petCtx.arc(cx - 5, cy + 12, 5, 0.1, Math.PI - 0.3); petCtx.stroke();
+  petCtx.beginPath(); petCtx.arc(cx + 5, cy + 12, 5, 0.3, Math.PI - 0.1); petCtx.stroke();
+
+  // Syal Oranye-Pink
+  petCtx.save();
+  petCtx.translate(cx, cy + 45);
+  petCtx.fillStyle = "#E76F51"; petCtx.beginPath(); petCtx.ellipse(0, 0, 70, 18, 0, 0, Math.PI * 2); petCtx.fill();
+
+  petCtx.lineWidth = 10; petCtx.strokeStyle = "#F4A261";
+  for (let i = -60; i <= 60; i += 25) {
+    petCtx.beginPath(); petCtx.moveTo(i, -12); petCtx.lineTo(i - 5, 12); petCtx.stroke();
+  }
+
+  // Buntut Syal
+  petCtx.fillStyle = "#E76F51"; petCtx.beginPath();
+  petCtx.moveTo(20, 5); petCtx.lineTo(55, 10); petCtx.lineTo(45, 60); petCtx.lineTo(10, 55); petCtx.closePath(); petCtx.fill();
+  petCtx.fillStyle = "#F4A261"; petCtx.fillRect(14, 20, 35, 8); petCtx.fillRect(11, 38, 33, 8);
+
+  // Rumbai Syal
+  petCtx.strokeStyle = "#E76F51"; petCtx.lineWidth = 3;
+  for (let i = 0; i < 5; i++) {
+    petCtx.beginPath(); petCtx.moveTo(13 + (i * 7), 55); petCtx.lineTo(11 + (i * 7), 75); petCtx.stroke();
+  }
+  petCtx.restore();
+
+  // Bunga Matahari di Kepala
+  petCtx.save();
+  petCtx.translate(cx - 15, cy - 50);
+  petCtx.strokeStyle = "#4A7C59"; petCtx.lineWidth = 2; petCtx.beginPath(); petCtx.moveTo(0, 0); petCtx.quadraticCurveTo(-10, -25, -5, -50); petCtx.stroke();
+
+  petCtx.fillStyle = "#E9C46A";
+  for (let i = 0; i < 8; i++) {
+    petCtx.beginPath(); petCtx.arc(-5 + Math.cos(i * Math.PI / 4) * 12, -50 + Math.sin(i * Math.PI / 4) * 12, 5, 0, Math.PI * 2); petCtx.fill();
+  }
+  petCtx.fillStyle = "#A2612D"; petCtx.beginPath(); petCtx.arc(-5, -50, 6, 0, Math.PI * 2); petCtx.fill();
+  petCtx.restore();
 }
 
+function drawCuteGreenEye(ecx, ecy, mx, my) {
+  if (!petCtx) return;
+  petCtx.fillStyle = "#A8DADC"; petCtx.beginPath(); petCtx.arc(ecx, ecy, 14, 0, Math.PI * 2); petCtx.fill();
+
+  let angle = Math.atan2(my - ecy, mx - ecx);
+  let dist = Math.min(Math.sqrt(Math.pow(mx - ecx, 2) + Math.pow(my - ecy, 2)), 3);
+  let pupilX = ecx + Math.cos(angle) * dist;
+  let pupilY = ecy + Math.sin(angle) * dist;
+
+  petCtx.fillStyle = "#1D3557"; petCtx.beginPath(); petCtx.ellipse(pupilX, pupilY, 5, 9, 0, 0, Math.PI * 2); petCtx.fill();
+  petCtx.fillStyle = "#FFFFFF"; petCtx.beginPath(); petCtx.arc(pupilX - 3, pupilY - 4, 3, 0, Math.PI * 2); petCtx.fill();
+}
+
+// Fungsi Gambar Anjing Mengintip (Fokus Utama pada Pilihan Anjing)
 function drawDog(mx, my, cx, cy) {
-  ctx.fillStyle = "#D4A373"; ctx.beginPath(); ctx.ellipse(cx, cy, 48, 45, 0, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#A26E3A"; ctx.beginPath(); ctx.ellipse(cx - 45, cy + 5, 12, 25, Math.PI/12, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse(cx + 45, cy + 5, 12, 25, -Math.PI/12, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = "#FEFAE0"; ctx.beginPath(); ctx.ellipse(cx, cy + 8, 20, 14, 0, 0, Math.PI*2); ctx.fill();
-  drawEye(cx - 20, cy - 15, 12, 5, mx, my); drawEye(cx + 20, cy - 15, 12, 5, mx, my);
-  ctx.fillStyle = "#FF7B94"; ctx.beginPath(); ctx.arc(cx, cy + 12, 6, 0, Math.PI); ctx.fill();
-  ctx.fillStyle = "#4A2810"; ctx.beginPath(); ctx.ellipse(cx, cy + 2, 8, 5, 0, 0, Math.PI*2); ctx.fill();
+  if (!petCtx) return;
+  // Latar Kuning Tua
+  petCtx.fillStyle = "#F5B016"; petCtx.fillRect(cx - 150, cy - 150, 300, 300);
+
+  // Bulu Hitam Kepala
+  petCtx.fillStyle = "#1A1A1A"; petCtx.beginPath(); petCtx.ellipse(cx, cy + 50, 95, 80, 0, 0, Math.PI * 2); petCtx.fill();
+
+  // Corak Putih Jidat
+  petCtx.fillStyle = "#FFFFFF"; petCtx.beginPath();
+  petCtx.moveTo(cx - 12, cy + 50); petCtx.quadraticCurveTo(cx, cy - 25, cx, cy - 25); petCtx.quadraticCurveTo(cx, cy - 25, cx + 12, cy + 50);
+  petCtx.closePath(); petCtx.fill();
+
+  // Mata Mendongak
+  drawDogUpwardEye(cx - 42, cy + 10, mx, my); 
+  drawDogUpwardEye(cx + 42, cy + 10, mx, my); 
+
+  // Moncong Putih
+  let muzzleGrad = petCtx.createLinearGradient(cx, cy + 10, cx, cy + 100);
+  muzzleGrad.addColorStop(0, "#FFFFFF"); muzzleGrad.addColorStop(1, "#EAEAEA");
+  petCtx.fillStyle = muzzleGrad; petCtx.beginPath(); petCtx.ellipse(cx, cy + 70, 65, 45, 0, 0, Math.PI * 2); petCtx.fill();
+
+  // Hidung Hitam Besar
+  petCtx.fillStyle = "#252525"; petCtx.beginPath(); petCtx.ellipse(cx, cy + 85, 42, 25, 0, 0, Math.PI * 2); petCtx.fill();
+  petCtx.fillStyle = "rgba(255, 255, 255, 0.15)"; petCtx.beginPath(); petCtx.ellipse(cx, cy + 73, 20, 6, 0, 0, Math.PI * 2); petCtx.fill();
 }
 
+function drawDogUpwardEye(ecx, ecy, mx, my) {
+  if (!petCtx) return;
+  petCtx.strokeStyle = "#111111"; petCtx.lineWidth = 1.5; petCtx.fillStyle = "#111111";
+  petCtx.beginPath(); petCtx.arc(ecx, ecy, 19, 0, Math.PI * 2); petCtx.fill(); petCtx.stroke();
+
+  petCtx.fillStyle = "#A66226"; petCtx.beginPath(); petCtx.arc(ecx, ecy, 17, 0, Math.PI * 2); petCtx.fill();
+  petCtx.fillStyle = "rgba(40, 20, 5, 0.6)"; petCtx.beginPath(); petCtx.arc(ecx, ecy, 17, Math.PI, 0); petCtx.fill();
+
+  let angle = Math.atan2(my - ecy, mx - ecx);
+  let dist = Math.min(Math.sqrt(Math.pow(mx - ecx, 2) + Math.pow(my - ecy, 2)), 4);
+  let pupilX = ecx + Math.cos(angle) * dist;
+  let pupilY = (ecy - 2) + Math.sin(angle) * dist;
+
+  petCtx.fillStyle = "#1A1A1A"; petCtx.beginPath(); petCtx.arc(pupilX, pupilY, 11, 0, Math.PI * 2); petCtx.fill();
+  petCtx.fillStyle = "rgba(255, 255, 255, 0.85)"; petCtx.beginPath(); petCtx.ellipse(pupilX - 2, pupilY - 4, 6, 3, Math.PI / 12, 0, Math.PI * 2); petCtx.fill();
+  petCtx.fillStyle = "rgba(255, 255, 255, 0.3)"; petCtx.beginPath(); petCtx.arc(pupilX + 4, pupilY + 5, 2, 0, Math.PI * 2); petCtx.fill();
+}
+
+// Handler Emoji Cursor Picker Click
 document.querySelectorAll(".emoji-picker span").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".emoji-picker span").forEach(s => s.classList.remove("active-cursor"));
     btn.classList.add("active-cursor");
     const selectedType = btn.getAttribute("data-animal");
+    
     if (selectedType === "normal") {
       document.body.style.cursor = "auto";
       document.getElementById("petBubbleChat").innerText = "Kursor kamu kembali normal! Tapi aku tetap menemanimu di sini. 💻";
@@ -119,7 +341,9 @@ document.querySelectorAll(".emoji-picker span").forEach((btn) => {
   });
 });
 
-// ========== NOTIFIKASI SUARA ==========
+// ==========================================
+// AUDIO ALARM BUZZER SYSTEM
+// ==========================================
 function playBuzzerNotification() {
   try {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -140,19 +364,9 @@ function playBuzzerNotification() {
   } catch(e) { console.log("AudioContext blocked."); }
 }
 
-// ========== DATA GLOBAL ==========
-let timerInterval = null, isRunning = false, isPaused = false, currentMode = "focus";
-let userFocusSeconds = 0, userBreakSeconds = 0, currentSeconds = 0, totalDurationInMode = 0;
-let lockedHour = 0, lockedMin = 0, lockedSec = 0;
-let stats = {
-  activeBreakCompleted: 0, focusMinutesTotal: 0, weeklyStreak: 0, lastStreakDate: null,
-  totalFocusSessionsToday: 0, memos: [], customMaxMenit: 0, customMaxTugas: 0
-};
-let tasks = [];
-const todayObj = new Date();
-let selectedFilterDate = `${todayObj.getFullYear()}-${(todayObj.getMonth()+1).toString().padStart(2,'0')}-${todayObj.getDate().toString().padStart(2,'0')}`;
-
-// ========== WHEEL PICKER ==========
+// ==========================================
+// 3D WHEEL TIME PICKER MODULE
+// ==========================================
 function build3DWheelPicker() {
   setupWheelColumn("wheelHours", 23);
   setupWheelColumn("wheelMinutes", 59);
@@ -177,7 +391,12 @@ function setupWheelColumn(columnId, maxVal) {
     item.className = "wheel-item";
     item.setAttribute("data-val", i);
     item.innerText = i.toString().padStart(2, "0");
-    item.addEventListener("click", () => { if(!isRunning && !isPaused) { setWheelActiveValue(columnId, i); setTimeout(calculateTotalSecondsFromWheels,50); } });
+    item.addEventListener("click", () => { 
+      if(!isRunning && !isPaused) { 
+        setWheelActiveValue(columnId, i); 
+        setTimeout(calculateTotalSecondsFromWheels, 50); 
+      } 
+    });
     col.appendChild(item);
   }
   const bottomSpacer = document.createElement("div");
@@ -209,6 +428,7 @@ function setupWheelScrollListener(columnId) {
 
 function setWheelActiveValue(columnId, val) {
   const col = document.getElementById(columnId);
+  if(!col) return;
   const targetItem = col.querySelector(`.wheel-item[data-val="${val}"]`);
   if(targetItem) {
     col.scrollTop = targetItem.offsetTop - col.offsetHeight/2 + targetItem.offsetHeight/2;
@@ -233,14 +453,20 @@ function calculateTotalSecondsFromWheels() {
   updateTimerDisplay();
 }
 
-// ========== STORAGE ==========
+// ==========================================
+// LOCAL STORAGE DATA & STATE
+// ==========================================
 function loadStorageData() {
   const savedStats = localStorage.getItem("pomostep_stats");
   if(savedStats) { try { stats = { ...stats, ...JSON.parse(savedStats) }; } catch(e) {} }
   const savedTasks = localStorage.getItem("pomostep_tasks");
   if(savedTasks) { try { tasks = JSON.parse(savedTasks); } catch(e) {} }
-  document.getElementById("inputMaxMenit").value = stats.customMaxMenit || 0;
-  document.getElementById("inputMaxTugas").value = stats.customMaxTugas || 0;
+  
+  const inputMenit = document.getElementById("inputMaxMenit");
+  const inputTugas = document.getElementById("inputMaxTugas");
+  if(inputMenit) inputMenit.value = stats.customMaxMenit || 0;
+  if(inputTugas) inputTugas.value = stats.customMaxTugas || 0;
+  
   const d = new Date(selectedFilterDate);
   renderCalendar(d.getFullYear(), d.getMonth());
   renderTasks();
@@ -256,11 +482,15 @@ function saveData() {
   renderCalendar(d.getFullYear(), d.getMonth());
 }
 
-// ========== KALENDER (DENGAN BINTANG UNTUK SEMUA TUGAS) ==========
+// ==========================================
+// CALENDER RENDERING SYSTEM
+// ==========================================
 const monthNames = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 function renderCalendar(year, month) {
-  document.getElementById("calendarMonthYearTitle").innerText = `${monthNames[month]} ${year}`;
+  const title = document.getElementById("calendarMonthYearTitle");
+  if(title) title.innerText = `${monthNames[month]} ${year}`;
   const container = document.getElementById("calendarDaysContainer");
+  if(!container) return;
   const labels = container.querySelectorAll(".calendar-day-label");
   container.innerHTML = "";
   labels.forEach(l => container.appendChild(l));
@@ -272,7 +502,7 @@ function renderCalendar(year, month) {
     cell.className = "calendar-cell";
     cell.innerText = day;
     const loopDateStr = `${year}-${(month+1).toString().padStart(2,'0')}-${day.toString().padStart(2,'0')}`;
-    // 🌟 BINTANG UNTUK SEMUA TUGAS (tidak peduli completed)
+    
     if(tasks.some(t => t.date === loopDateStr)) {
       cell.classList.add("has-event");
     }
@@ -287,9 +517,12 @@ function renderCalendar(year, month) {
   }
 }
 
-// ========== MANAJEMEN TUGAS ==========
+// ==========================================
+// TASK MANAJEMEN LOGIC
+// ==========================================
 function renderTasks() {
   const todoList = document.getElementById("todoList");
+  if(!todoList) return;
   todoList.innerHTML = "";
   const filtered = tasks.filter(t => t.date === selectedFilterDate);
   if(filtered.length === 0) {
@@ -314,6 +547,7 @@ function renderTasks() {
     `;
     todoList.appendChild(card);
   });
+  
   document.querySelectorAll('.todo-item-custom input[type="checkbox"]').forEach(cb => {
     cb.addEventListener("change", (e) => {
       tasks[parseInt(e.target.getAttribute("data-index"))].completed = e.target.checked;
@@ -328,7 +562,14 @@ function renderTasks() {
   });
 }
 
-function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+function escapeHtml(str) { 
+  return str.replace(/[&<>]/g, function(m){ 
+    if(m==='&') return '&amp;'; 
+    if(m==='<') return '&lt;'; 
+    if(m==='>') return '&gt;'; 
+    return m;
+  }); 
+}
 
 document.getElementById("modalTaskForm")?.addEventListener("submit", function(e) {
   e.preventDefault();
@@ -346,7 +587,9 @@ document.getElementById("modalTaskForm")?.addEventListener("submit", function(e)
   }
 });
 
-// ========== ALARM & NOTIF ==========
+// ==========================================
+// BACKGROUND REALTIME ALARM TICKER
+// ==========================================
 setInterval(function checkAlarmTicker() {
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${now.getDate().toString().padStart(2,'0')}`;
@@ -356,16 +599,25 @@ setInterval(function checkAlarmTicker() {
       task.alarmed = true;
       saveData();
       playBuzzerNotification();
-      document.getElementById("liveAlarmAlertBanner").classList.remove("d-none");
-      document.getElementById("alarmAlertMessage").innerText = `[ALARM KULIAH] ${task.subject.toUpperCase()} - ${task.text}`;
-      document.getElementById("timer-section").scrollIntoView({ behavior: "smooth", block: "start" });
+      
+      const banner = document.getElementById("liveAlarmAlertBanner");
+      const message = document.getElementById("alarmAlertMessage");
+      if(banner && message) {
+        banner.classList.remove("d-none");
+        message.innerText = `[ALARM KULIAH] ${task.subject.toUpperCase()} - ${task.text}`;
+      }
+      document.getElementById("timer-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
 }, 1000);
 
-function dismissLiveAlarm() { document.getElementById("liveAlarmAlertBanner").classList.add("d-none"); }
+function dismissLiveAlarm() { 
+  document.getElementById("liveAlarmAlertBanner")?.classList.add("d-none"); 
+}
 
-// ========== STREAK & STATISTIK ==========
+// ==========================================
+// DASHBOARD STREAK & STATISTIK UI
+// ==========================================
 function verifyStreakLogic() {
   const todayStr = new Date().toDateString();
   if(stats.lastStreakDate) {
@@ -373,6 +625,7 @@ function verifyStreakLogic() {
     if(diffDays > 1) { stats.weeklyStreak = 0; saveData(); }
   }
 }
+
 function triggerStreakIncrement() {
   const todayStr = new Date().toDateString();
   if(stats.lastStreakDate !== todayStr) { stats.weeklyStreak += 1; stats.lastStreakDate = todayStr; }
@@ -388,31 +641,44 @@ function updateStatsUI() {
   let totalAkumulatifTargetSemua = targetTugasHariIni + otherTasksCount;
   let totalSeluruhTugasSelesai = tasks.filter(t => t.completed).length;
 
-  document.getElementById("dashActiveBreakCount").innerText = stats.activeBreakCompleted;
-  document.getElementById("targetMenitFokus").innerText = stats.focusMinutesTotal;
-  document.getElementById("totalMenitFokusKeseluruhan").innerText = stats.focusMinutesTotal;
-  document.getElementById("dashWeeklyStreak").innerText = stats.weeklyStreak;
-  document.getElementById("dashTotalSessionsToday").innerText = stats.totalFocusSessionsToday;
-  document.getElementById("targetTugasSelesai").innerText = todayTasksCompletedCount;
-  document.getElementById("targetTugasHariIniTotal").innerText = targetTugasHariIni;
-  document.getElementById("totalTugasSelesaiKeseluruhan").innerText = totalSeluruhTugasSelesai;
-  document.getElementById("totalTugasKeseluruhanSemua").innerText = totalAkumulatifTargetSemua;
+  const bindings = {
+    dashActiveBreakCount: stats.activeBreakCompleted,
+    targetMenitFokus: stats.focusMinutesTotal,
+    totalMenitFokusKeseluruhan: stats.focusMinutesTotal,
+    dashWeeklyStreak: stats.weeklyStreak,
+    dashTotalSessionsToday: stats.totalFocusSessionsToday,
+    targetTugasSelesai: todayTasksCompletedCount,
+    targetTugasHariIniTotal: targetTugasHariIni,
+    totalTugasSelesaiKeseluruhan: totalSeluruhTugasSelesai,
+    totalTugasKeseluruhanSemua: totalAkumulatifTargetSemua,
+    capaianTotalSesi: stats.totalFocusSessionsToday,
+    capaianRataRata: (stats.totalFocusSessionsToday > 0 ? Math.round(stats.focusMinutesTotal / stats.totalFocusSessionsToday) : 0) + " m/sesi"
+  };
 
+  for (let key in bindings) {
+    const el = document.getElementById(key);
+    if(el) el.innerText = bindings[key];
+  }
+
+  // Ring Progress Hari Ini
   let maxMenit = stats.customMaxMenit || 0;
   let percentToday = maxMenit > 0 ? Math.min(100, Math.round((stats.focusMinutesTotal / maxMenit) * 100)) : 0;
-  document.getElementById("dashProgressPercentText").innerText = percentToday + "%";
-  let ringDashOffsetToday = 408.4 - (408.4 * percentToday) / 100;
-  document.getElementById("dashCircularProgressRing").style.strokeDashoffset = ringDashOffsetToday;
+  const tPercentToday = document.getElementById("dashProgressPercentText");
+  if(tPercentToday) tPercentToday.innerText = percentToday + "%";
+  const rRingToday = document.getElementById("dashCircularProgressRing");
+  if(rRingToday) rRingToday.style.strokeDashoffset = 408.4 - (408.4 * percentToday) / 100;
+
+  // Ring Progress Total Kumulatif
   let percentAll = totalAkumulatifTargetSemua > 0 ? Math.min(100, Math.round((totalSeluruhTugasSelesai / totalAkumulatifTargetSemua) * 100)) : 0;
-  document.getElementById("dashProgressPercentTextAll").innerText = percentAll + "%";
-  let ringDashOffsetAll = 408.4 - (408.4 * percentAll) / 100;
-  document.getElementById("dashCircularProgressRingAll").style.strokeDashoffset = ringDashOffsetAll;
-  document.getElementById("capaianTotalSesi").innerText = stats.totalFocusSessionsToday;
-  document.getElementById("capaianRataRata").innerText = (stats.totalFocusSessionsToday > 0 ? Math.round(stats.focusMinutesTotal / stats.totalFocusSessionsToday) : 0) + " m/sesi";
+  const tPercentAll = document.getElementById("dashProgressPercentTextAll");
+  if(tPercentAll) tPercentAll.innerText = percentAll + "%";
+  const rRingAll = document.getElementById("dashCircularProgressRingAll");
+  if(rRingAll) rRingAll.style.strokeDashoffset = 408.4 - (408.4 * percentAll) / 100;
 }
 
 function renderMemos() {
   const area = document.getElementById("memoLogArea");
+  if(!area) return;
   if(!stats.memos || stats.memos.length === 0) {
     area.innerHTML = `<div class="small text-muted italic text-center py-3">Belum ada rekaman fokus.</div>`;
     return;
@@ -438,21 +704,29 @@ function createFocusMemo() {
   }, 600);
 }
 
-// ========== TIMER ==========
+// ==========================================
+// CORE POMODORO TIMER ENGINE
+// ==========================================
 function updateTimerDisplay() {
+  const timerDisp = document.getElementById("timerDisplay");
+  if(!timerDisp) return;
   let hrs = Math.floor(currentSeconds/3600);
   let mins = Math.floor((currentSeconds%3600)/60);
   let secs = currentSeconds%60;
-  document.getElementById("timerDisplay").innerText = `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+  timerDisp.innerText = `${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+  
   let barPercent = totalDurationInMode > 0 ? (currentSeconds/totalDurationInMode)*100 : 0;
-  document.getElementById("timerRingBar").style.width = barPercent + "%";
+  const timerBar = document.getElementById("timerRingBar");
+  if(timerBar) timerBar.style.width = barPercent + "%";
 }
+
 function stopTimer() {
   if(timerInterval) { clearInterval(timerInterval); timerInterval = null; }
   isRunning = false; isPaused = true;
-  document.getElementById("globalWheelWrapper").classList.add("locked");
+  document.getElementById("globalWheelWrapper")?.classList.add("locked");
   setButtonVisualState("pause");
 }
+
 function startTimer() {
   const activeHour = document.querySelector("#wheelHours .wheel-item.selected");
   const activeMin = document.querySelector("#wheelMinutes .wheel-item.selected");
@@ -479,15 +753,17 @@ function startTimer() {
     lockedSec = activeSec ? parseInt(activeSec.getAttribute("data-val")) : 0;
   }
   isRunning = true; isPaused = false;
-  document.getElementById("globalWheelWrapper").classList.add("locked");
+  document.getElementById("globalWheelWrapper")?.classList.add("locked");
   setButtonVisualState("start");
+  
   timerInterval = setInterval(() => {
     if(currentSeconds <= 0) {
       clearInterval(timerInterval); timerInterval = null;
       isRunning = false; isPaused = false;
-      document.getElementById("globalWheelWrapper").classList.remove("locked");
+      document.getElementById("globalWheelWrapper")?.classList.remove("locked");
       setButtonVisualState("reset");
       playBuzzerNotification();
+      
       if(currentMode === "focus") {
         stats.focusMinutesTotal += Math.max(1, Math.round(totalDurationInMode/60));
         stats.totalFocusSessionsToday += 1;
@@ -508,24 +784,31 @@ function startTimer() {
     updateTimerDisplay();
   }, 1000);
 }
+
 function setMode(mode) {
   currentMode = mode;
-  document.getElementById("timerModeText").innerText = mode==="focus" ? "Fokus Dimulai" : "Waktunya Istirahat";
-  document.getElementById("timerModeText").className = mode==="focus" ? "small fw-bold text-uppercase text-success" : "small fw-bold text-uppercase text-warning";
-  document.getElementById("focusModeBtn").classList.toggle("active", mode==="focus");
-  document.getElementById("breakModeBtn").classList.toggle("active", mode==="break");
+  const mText = document.getElementById("timerModeText");
+  if(mText) {
+    mText.innerText = mode==="focus" ? "Fokus Dimulai" : "Waktunya Istirahat";
+    mText.className = mode==="focus" ? "small fw-bold text-uppercase text-success" : "small fw-bold text-uppercase text-warning";
+  }
+  document.getElementById("focusModeBtn")?.classList.toggle("active", mode==="focus");
+  document.getElementById("breakModeBtn")?.classList.toggle("active", mode==="break");
   if(timerInterval) { clearInterval(timerInterval); timerInterval=null; }
   isRunning=false; isPaused=false;
-  document.getElementById("globalWheelWrapper").classList.remove("locked");
+  document.getElementById("globalWheelWrapper")?.classList.remove("locked");
   setButtonVisualState("reset");
   currentSeconds = mode==="focus" ? userFocusSeconds : userBreakSeconds;
   totalDurationInMode = currentSeconds;
   updateTimerDisplay();
 }
+
 function setButtonVisualState(activeBtnId) {
   const btnStart = document.getElementById("startTimerBtn");
   const btnPause = document.getElementById("pauseTimerBtn");
   const btnReset = document.getElementById("resetTimerBtn");
+  if(!btnStart || !btnPause || !btnReset) return;
+  
   [btnStart, btnPause, btnReset].forEach(btn => btn.classList.remove("btn-status-active","btn-status-inactive"));
   if(activeBtnId==="reset") return;
   if(activeBtnId==="start") {
@@ -539,48 +822,57 @@ function setButtonVisualState(activeBtnId) {
   }
 }
 
-// ========== EVENT LISTENER ==========
+// ==========================================
+// CORE DOM & NAVIGATION EVENT LISTENERS
+// ==========================================
 document.getElementById("startTimerBtn")?.addEventListener("click", startTimer);
 document.getElementById("pauseTimerBtn")?.addEventListener("click", stopTimer);
 document.getElementById("resetTimerBtn")?.addEventListener("click", () => setMode(currentMode));
 document.getElementById("focusModeBtn")?.addEventListener("click", () => setMode("focus"));
 document.getElementById("breakModeBtn")?.addEventListener("click", () => setMode("break"));
+
 document.getElementById("btnFocusNow")?.addEventListener("click", () => {
   document.querySelectorAll(".nav-pill-custom").forEach(p => p.classList.remove("active"));
-  document.querySelector('[data-target="timer-section"]').classList.add("active");
-  document.getElementById("timer-section").scrollIntoView({ behavior: "smooth", block: "start" });
+  document.querySelector('[data-target="timer-section"]')?.classList.add("active");
+  document.getElementById("timer-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
 });
+
 document.getElementById("btnSeeTasks")?.addEventListener("click", () => {
   document.querySelectorAll(".nav-pill-custom").forEach(p => p.classList.remove("active"));
-  document.querySelector('[data-target="tugas-section"]').classList.add("active");
-  document.getElementById("tugas-section").scrollIntoView({ behavior: "smooth", block: "start" });
+  document.querySelector('[data-target="tugas-section"]')?.classList.add("active");
+  document.getElementById("tugas-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
 });
+
 document.getElementById("resetDataBtn")?.addEventListener("click", () => {
   if(confirm("Apakah Anda yakin ingin reset semua data?")) {
     localStorage.clear();
     stats = { activeBreakCompleted:0, focusMinutesTotal:0, weeklyStreak:0, lastStreakDate:null, totalFocusSessionsToday:0, memos:[], customMaxMenit:0, customMaxTugas:0 };
     tasks = [];
     userFocusSeconds=0; userBreakSeconds=0;
-    document.getElementById("inputMaxMenit").value = 0;
-    document.getElementById("inputMaxTugas").value = 0;
+    const inMenit = document.getElementById("inputMaxMenit");
+    const inTugas = document.getElementById("inputMaxTugas");
+    if(inMenit) inMenit.value = 0;
+    if(inTugas) inTugas.value = 0;
     const nowD = new Date();
     selectedFilterDate = `${nowD.getFullYear()}-${(nowD.getMonth()+1).toString().padStart(2,'0')}-${nowD.getDate().toString().padStart(2,'0')}`;
     setMode("focus");
     loadStorageData();
   }
 });
+
 document.getElementById("inputMaxMenit")?.addEventListener("input", (e) => {
   let val = parseInt(e.target.value);
   stats.customMaxMenit = !isNaN(val) && val>=0 ? val : 0;
   saveData();
 });
+
 document.getElementById("inputMaxTugas")?.addEventListener("input", (e) => {
   let val = parseInt(e.target.value);
   stats.customMaxTugas = !isNaN(val) && val>=0 ? val : 0;
   saveData();
 });
 
-// ========== SCROLL SPY ==========
+// Scroll Spy Tracker
 window.addEventListener("scroll", () => {
   const targets = document.querySelectorAll(".scroll-target-marker");
   let currentActiveId = "dashboard-section";
@@ -595,38 +887,26 @@ window.addEventListener("scroll", () => {
   });
 });
 
-// ========== INISIALISASI ==========
-document.body.style.cursor = `url("${animalCursors["frog"]}") 4 4, auto`;
-build3DWheelPicker();
-loadStorageData();
-setMode("focus");
-drawPet();
-
-// Modal picker sederhana (opsional)
-function initCustomPickers() {
-  const dateInput = document.getElementById("formTaskDate");
-  const timeInput = document.getElementById("formTaskTime");
-  if(dateInput && timeInput) {
-    dateInput.onclick = () => { /* bisa diisi kalender bawaan */ };
-    timeInput.onclick = () => { };
-  }
-}
-initCustomPickers();
-
-// ========== TAMBAHAN NAVIGASI CLICK-TO-SCROLL ==========
+// Click To Scroll Navigation Setup
 document.querySelectorAll(".nav-pill-custom").forEach(pill => {
     pill.addEventListener("click", function() {
         const targetId = this.getAttribute("data-target");
         const targetSection = document.getElementById(targetId);
         
         if (targetSection) {
-            targetSection.scrollIntoView({ 
-                behavior: "smooth", 
-                block: "start" 
-            });
-
+            targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
             document.querySelectorAll(".nav-pill-custom").forEach(p => p.classList.remove("active"));
             this.classList.add("active");
         }
     });
 });
+
+// ==========================================
+// SYSTEM INITIALIZATION
+// ==========================================
+document.body.style.cursor = `url("${animalCursors["frog"]}") 4 4, auto`;
+build3DWheelPicker();
+loadStorageData();
+verifyStreakLogic();
+setMode("focus");
+drawPet();
