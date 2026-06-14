@@ -251,58 +251,94 @@ session_start();
     </div>
 </div>
 
-<!-- Modal Pengaturan -->
+<!-- Modal Pengaturan Baru - Desain Menarik -->
 <div class="modal fade" id="pengaturanModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title"><i class="bi bi-sliders2"></i> Pengaturan Aplikasi</h5>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 overflow-hidden">
+            <div class="modal-header bg-gradient-success text-white border-0 py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="setting-header-icon">
+                        <i class="bi bi-sliders2 fs-3"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0">Pengaturan Aplikasi</h5>
+                        <p class="small text-white-50 mb-0">Sesuaikan PomoStep sesuai keinginanmu</p>
+                    </div>
+                </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body">
-                <!-- Opsi Notifikasi -->
-                <div class="setting-option-item mb-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="bi bi-bell-fill text-warning setting-icon"></i>
-                            <span class="fw-bold">Notifikasi Suara</span>
-                            <p class="small text-muted mb-0">Aktifkan bunyi saat timer selesai atau alarm tugas.</p>
+            <div class="modal-body p-4">
+                <!-- Grid layout untuk pengaturan -->
+                <div class="row g-4">
+                    <!-- Kartu Notifikasi Suara -->
+                    <div class="col-md-6">
+                        <div class="setting-card h-100 p-3 rounded-4 border shadow-sm">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="d-flex gap-3">
+                                    <div class="setting-icon-box bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="bi bi-bell-fill text-success fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Notifikasi Suara</h6>
+                                        <p class="small text-muted mb-0">Aktifkan bunyi saat timer selesai atau alarm tugas.</p>
+                                    </div>
+                                </div>
+                                <div class="form-check form-switch form-switch-lg">
+                                    <input class="form-check-input" type="checkbox" id="soundNotificationToggle" checked style="transform: scale(1.2);">
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-check form-switch form-switch-large">
-                            <input class="form-check-input" type="checkbox" id="soundNotificationToggle" checked>
+                    </div>
+
+                    <!-- Kartu Mode Gelap -->
+                    <div class="col-md-6">
+                        <div class="setting-card h-100 p-3 rounded-4 border shadow-sm">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="d-flex gap-3">
+                                    <div class="setting-icon-box bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="bi bi-moon-stars-fill text-info fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1">Mode Gelap</h6>
+                                        <p class="small text-muted mb-0">Ganti tema gelap untuk kenyamanan mata.</p>
+                                    </div>
+                                </div>
+                                <div class="form-check form-switch form-switch-lg">
+                                    <input class="form-check-input" type="checkbox" id="darkModeToggle" style="transform: scale(1.2);">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kartu Zona Berbahaya (Reset Data) - Full width -->
+                    <div class="col-12 mt-2">
+                        <div class="setting-card-danger p-3 rounded-4 border border-danger bg-danger bg-opacity-10">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                                <div class="d-flex gap-3 align-items-center">
+                                    <div class="setting-icon-box bg-danger bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                        <i class="bi bi-exclamation-triangle-fill text-danger fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-1 text-danger">Reset Semua Data</h6>
+                                        <p class="small text-muted mb-0">Hapus semua tugas, memo, statistik, dan pengaturan. Tindakan permanen.</p>
+                                    </div>
+                                </div>
+                                <button class="btn btn-danger rounded-pill px-4 py-2 fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#confirmResetModal">
+                                    <i class="bi bi-eraser-fill me-1"></i> Reset Data
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- Opsi Mode Gelap -->
-                <div class="setting-option-item mb-4">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <i class="bi bi-palette-fill text-info setting-icon"></i>
-                            <span class="fw-bold">Mode Gelap (Beta)</span>
-                            <p class="small text-muted mb-0">Ganti tema gelap untuk kenyamanan mata.</p>
-                        </div>
-                        <div class="form-check form-switch form-switch-large">
-                            <input class="form-check-input" type="checkbox" id="darkModeToggle">
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <!-- Zona Berbahaya -->
-                <div class="danger-zone-settings">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                        <div>
-                            <i class="bi bi-trash3-fill text-danger fs-4 me-2"></i>
-                            <span class="fw-bold">Reset Semua Data</span>
-                            <p class="small text-muted mb-0">Hapus semua tugas, memo, statistik, dan pengaturan. Tindakan permanen.</p>
-                        </div>
-                        <button class="btn btn-danger btn-setting-modal" data-bs-toggle="modal" data-bs-target="#confirmResetModal">
-                            <i class="bi bi-eraser-fill"></i> Reset Data
-                        </button>
-                    </div>
+
+                <!-- Informasi tambahan (opsional) -->
+                <div class="alert alert-light border mt-4 mb-0 rounded-4 p-3 small text-center">
+                    <i class="bi bi-info-circle-fill text-success me-1"></i>
+                    Perubahan akan langsung diterapkan. Mode gelap membutuhkan refresh halaman jika terjadi bug visual.
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <div class="modal-footer bg-light border-0 py-3">
+                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
