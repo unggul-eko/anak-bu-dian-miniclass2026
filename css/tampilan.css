@@ -17,10 +17,10 @@ body {
   background: rgba(227, 238, 223, 0.92);
   backdrop-filter: blur(12px);
   z-index: 1000;
-  
+
   /*Ubah padding atas-bawah dari 12px menjadi 16px atau 18px */
-  padding: 16px 20px; 
-  
+  padding: 16px 20px;
+
   border-bottom: 1px solid rgba(46, 125, 50, 0.12);
   display: flex;
   flex-direction: column;
@@ -104,10 +104,10 @@ body {
     flex-direction: column;
     gap: 0.8rem;
     padding: 1rem;
-    border-top: 1px solid rgba(46,125,50,0.2);
-    border-bottom: 1px solid rgba(46,125,50,0.2);
+    border-top: 1px solid rgba(46, 125, 50, 0.2);
+    border-bottom: 1px solid rgba(46, 125, 50, 0.2);
     z-index: 1050;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
   .nav-scroll-container.show {
     display: flex;
@@ -363,6 +363,17 @@ canvas {
   justify-content: center;
   color: #2e7d32;
 }
+body.dark-mode .emoji-picker span {
+  background: white !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+body.dark-mode .emoji-picker span:hover,
+body.dark-mode .emoji-picker span.active-cursor {
+  background: #f1f8ef !important;
+  transform: scale(1.05);
+  border: 2px solid #2e7d32;
+}
 .emoji-picker span:hover,
 .emoji-picker span.active-cursor {
   background: #c8e6c9;
@@ -372,7 +383,11 @@ canvas {
 
 /* ========== DASHBOARD & STATISTIK ========== */
 .premium-dashboard-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(224,245,218,0.85) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(224, 245, 218, 0.85) 100%
+  );
   border: 1px solid rgba(46, 125, 50, 0.15);
   border-radius: 2.5rem;
   box-shadow: 0 15px 35px rgba(46, 125, 50, 0.05);
@@ -531,7 +546,7 @@ canvas {
   top: 2px;
   right: 2px;
   font-size: 0.7rem;
-  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.1));
   pointer-events: none;
 }
 .calendar-cell.active-selected {
@@ -684,7 +699,8 @@ canvas {
 }
 
 /* ========== MODAL TUGAS ========== */
-#formTaskDate, #formTaskTime {
+#formTaskDate,
+#formTaskTime {
   height: 45px !important;
   font-size: 1rem !important;
   padding: 5px 10px !important;
@@ -699,12 +715,239 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   overflow: visible !important;
 }
 .logo-img {
-    height: 60px;      /* sebelumnya 38px */
-    width: auto;
-    object-fit: contain;
+  height: 60px; /* sebelumnya 38px */
+  width: auto;
+  object-fit: contain;
 }
 @media (max-width: 576px) {
-    .logo-img {
-        height: 45px;   /* sebelumnya 30px */
-    }
+  .logo-img {
+    height: 45px; /* sebelumnya 30px */
+  }
+}
+
+/* Warna default (Terang) */
+body {
+  background-color: #ffffff;
+  color: #212529;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Warna saat Mode Gelap aktif */
+body.dark-mode {
+  background: #050806 !important;
+  background-image: none !important;
+  color: #ffffff;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode label,
+body.dark-mode a,
+body.dark-mode button,
+body.dark-mode .hero-title,
+body.dark-mode .hero-desc,
+body.dark-mode .micro-stat-lbl,
+body.dark-mode .calendar-day-label,
+body.dark-mode .status-note-box,
+body.dark-mode .text-secondary,
+body.dark-mode .text-muted,
+body.dark-mode .text-success,
+body.dark-mode .text-primary,
+body.dark-mode .text-danger,
+body.dark-mode .text-warning,
+body.dark-mode .todo-item-custom,
+body.dark-mode .memo-log-item {
+  color: #ffffff !important;
+}
+
+body.dark-mode .header-nav-sticky {
+  background: rgba(20, 30, 20, 0.92);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* body.dark-mode .logo-title {
+  background: linear-gradient(135deg, #6dbd7c, #4caf50);
+} */
+
+body.dark-mode .nav-pill-custom {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8f5e9;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .nav-pill-custom.active {
+  background: #4caf50;
+  color: white !important;
+  box-shadow: 0 8px 15px rgba(76, 175, 80, 0.35);
+}
+
+body.dark-mode .streak-badge {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .streak-badge i,
+body.dark-mode .streak-badge #dashWeeklyStreak {
+  color: #ffffff !important;
+}
+
+body.dark-mode .mode-switch {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+}
+
+body.dark-mode .mode-option {
+  color: #ffffff !important;
+}
+
+body.dark-mode .mode-option.active {
+  background: #4caf50 !important;
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2) !important;
+}
+
+body.dark-mode .glass-card,
+body.dark-mode .premium-dashboard-card,
+body.dark-mode .micro-stat-card,
+body.dark-mode .todo-item-custom,
+body.dark-mode .calendar-cell,
+body.dark-mode .pet-talk-bubble,
+body.dark-mode .status-note-box,
+body.dark-mode .memo-log-item,
+body.dark-mode .modal-content,
+body.dark-mode .modal-dialog,
+body.dark-mode .setting-option-item {
+  background: rgba(10, 15, 10, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .pet-talk-bubble {
+  background: rgba(255, 255, 255, 0.09) !important;
+}
+
+body.dark-mode .hero-desc,
+body.dark-mode .micro-stat-lbl,
+body.dark-mode .calendar-day-label,
+body.dark-mode .status-note-box,
+body.dark-mode .text-secondary,
+body.dark-mode .text-muted,
+body.dark-mode .text-success,
+body.dark-mode .text-primary,
+body.dark-mode .text-danger,
+body.dark-mode .text-warning,
+body.dark-mode .btn-control-custom,
+body.dark-mode .btn-hero-action,
+body.dark-mode .form-control,
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn-control-custom,
+body.dark-mode .btn-hero-action {
+  background-color: rgba(30, 50, 30, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+body.dark-mode .btn-control-custom:hover,
+body.dark-mode .btn-hero-action:hover {
+  background-color: #2e7d32 !important;
+}
+
+body.dark-mode .form-control,
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-mode .form-check-input {
+  border-color: #e0f7da !important;
+}
+
+body.dark-mode .form-check-input:checked {
+  background-color: #4caf50 !important;
+  border-color: #4caf50 !important;
+}
+
+body.dark-mode .timer-progress-ring {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+body.dark-mode .timer-progress-bar {
+  background: linear-gradient(90deg, #4caf50, #80e27e) !important;
+}
+
+body.dark-mode .calendar-cell {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+body.dark-mode .calendar-cell.active-selected {
+  background: #4caf50 !important;
+  color: white !important;
+  border-color: #4caf50 !important;
+}
+
+body.dark-mode .memo-log-item {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-left-color: #81c784 !important;
+}
+
+body.dark-mode .logo-img,
+body.dark-mode .logo-img-stat {
+  filter: brightness(1.2) !important;
+}
+
+body.dark-mode .bg-white,
+body.dark-mode .bg-light {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.dark-mode .bg-white .text-secondary,
+body.dark-mode .bg-white .text-success,
+body.dark-mode .bg-white .small,
+body.dark-mode .bg-white label,
+body.dark-mode .bg-white input,
+body.dark-mode .bg-white .form-control,
+body.dark-mode .bg-white .fw-semibold,
+body.dark-mode .bg-white .border-bottom,
+body.dark-mode .bg-light .text-secondary,
+body.dark-mode .bg-light .text-success,
+body.dark-mode .bg-light .small,
+body.dark-mode .bg-light label,
+body.dark-mode .bg-light input,
+body.dark-mode .bg-light .form-control,
+body.dark-mode .bg-light .fw-semibold,
+body.dark-mode .bg-light .border-bottom {
+  color: #ffffff !important;
+}
+
+body.dark-mode .bg-white input,
+body.dark-mode .bg-white .form-control,
+body.dark-mode .bg-light input,
+body.dark-mode .bg-light .form-control {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+body.dark-mode .text-muted {
+  color: #d4f1ca !important;
 }

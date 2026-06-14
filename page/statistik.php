@@ -35,7 +35,7 @@
     <div class="row g-4 mb-5">
         <div class="col-sm-6 col-lg-3">
             <div class="stat-card p-4 text-center d-flex flex-column align-items-center">
-                <div class="stat-icon"><i class="bi bi-tomato text-success"></i></div>
+                <div class="stat-icon"><i class="bi bi-stopwatch-fill text-success"></i></div>
                 <div class="stat-value" id="totalSesiHariIni">0</div>
                 <div class="stat-label">Sesi Fokus (Hari Ini)</div>
             </div>
@@ -130,5 +130,12 @@
 </div>
 
 <script src="../js/statistik.js"></script>
+<script>
+  const currentTheme = localStorage.getItem('theme');
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
+    document.body.classList.add('dark-mode');
+  }
+</script>
 </body>
 </html>
