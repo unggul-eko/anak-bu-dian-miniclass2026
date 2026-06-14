@@ -31,6 +31,34 @@ const todayObj = new Date();
 let selectedFilterDate = `${todayObj.getFullYear()}-${(todayObj.getMonth() + 1).toString().padStart(2, "0")}-${todayObj.getDate().toString().padStart(2, "0")}`;
 
 // ==========================================
+// Lightweight non-blocking notification (top-right)
+function showNotification(message, type = "success", timeout = 2500) {
+  let container = document.getElementById("globalNotificationBanner");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "globalNotificationBanner";
+    container.style.position = "fixed";
+    container.style.top = "16px";
+    container.style.right = "16px";
+    container.style.zIndex = "10800";
+    document.body.appendChild(container);
+  }
+  const el = document.createElement("div");
+  el.className = `alert alert-${type} shadow-sm`;
+  el.style.minWidth = "220px";
+  el.style.marginBottom = "8px";
+  el.role = "alert";
+  el.innerText = message;
+  container.appendChild(el);
+  setTimeout(() => {
+    el.classList.add("fade");
+    el.style.transition = "opacity 220ms";
+    el.style.opacity = "0";
+    setTimeout(() => el.remove(), 250);
+  }, timeout);
+  return el;
+}
+// ==========================================
 // INTERACTIVE PET & CURSOR MODULE
 // ==========================================
 const petQuotes = {
@@ -936,21 +964,76 @@ function renderMemos() {
 
 function createFocusMemo() {
   setTimeout(() => {
-    const textMemo = prompt("Sesi fokus selesai! Tulis memo singkat:");
-    const validText =
-      textMemo && textMemo.trim() !== ""
-        ? textMemo.trim()
-        : "Menyelesaikan fokus kustom wheel-scroll.";
-    const now = new Date();
-    const formatTimeClock = now.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
+    let memoModalEl = document.getElementById("memoModal");
+    let memoInput = document.getElementById("memoInput");
+
+    // If modal not present in DOM, create it dynamically and append to body
+    if (!memoModalEl || !memoInput) {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = `
+      <div class="modal fade" id="memoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Catatan Sesi</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <p id="memoModalMsg" class="small text-muted">Sesi selesai. Tulis ringkasan singkat kegiatan Anda:</p>
+              <textarea id="memoInput" class="form-control" rows="3" placeholder="Tulis catatan singkat..."></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lewati</button>
+              <button type="button" class="btn btn-primary" id="memoSaveBtn">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+      document.body.appendChild(wrapper);
+      memoModalEl = document.getElementById("memoModal");
+      memoInput = document.getElementById("memoInput");
+    }
+
+    if (!memoModalEl || !memoInput) return;
+    memoInput.value = "";
+    const memoModal = new bootstrap.Modal(memoModalEl);
+
+    memoModalEl.addEventListener("shown.bs.modal", () => memoInput.focus(), {
+      once: true,
     });
-    if (!stats.memos) stats.memos = [];
-    stats.memos.unshift({ time: formatTimeClock, text: validText });
-    if (stats.memos.length > 20) stats.memos.pop();
-    saveData();
-    renderMemos();
+
+    const saveHandler = () => {
+      const text =
+        memoInput.value && memoInput.value.trim() !== ""
+          ? memoInput.value.trim()
+          : "Menyelesaikan fokus kustom wheel-scroll.";
+      const now = new Date();
+      const formatTimeClock = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      if (!stats.memos) stats.memos = [];
+      stats.memos.unshift({ time: formatTimeClock, text });
+      if (stats.memos.length > 20) stats.memos.pop();
+      saveData();
+      renderMemos();
+      memoModal.hide();
+    };
+
+    const saveBtn = document.getElementById("memoSaveBtn");
+    if (saveBtn) saveBtn.addEventListener("click", saveHandler, { once: true });
+    // Allow Enter (without Shift) to submit the memo quickly
+    memoInput.addEventListener(
+      "keydown",
+      (ev) => {
+        if (ev.key === "Enter" && !ev.shiftKey) {
+          ev.preventDefault();
+          saveHandler();
+        }
+      },
+      { once: true },
+    );
+    memoModal.show();
   }, 600);
 }
 
@@ -1040,13 +1123,13 @@ function startTimer() {
         stats.totalFocusSessionsToday += 1;
         triggerStreakIncrement();
         saveData();
-        alert("✅ Sesi fokus selesai! Waktunya active break!");
+        // Tampilkan modal memo (tanpa alert)
         createFocusMemo();
         setMode("break");
       } else {
         stats.activeBreakCompleted += 1;
         saveData();
-        alert("🎉 Break selesai! Saatnya kembali fokus!");
+        // Break selesai — lanjutkan ke fokus tanpa alert
         setMode("focus");
       }
       return;
@@ -1146,29 +1229,15 @@ document.getElementById("btnSeeTasks")?.addEventListener("click", () => {
 });
 
 document.getElementById("resetDataBtn")?.addEventListener("click", () => {
-  if (confirm("Apakah Anda yakin ingin reset semua data?")) {
-    localStorage.clear();
-    stats = {
-      activeBreakCompleted: 0,
-      focusMinutesTotal: 0,
-      weeklyStreak: 0,
-      lastStreakDate: null,
-      totalFocusSessionsToday: 0,
-      memos: [],
-      customMaxMenit: 0,
-      customMaxTugas: 0,
-    };
-    tasks = [];
-    userFocusSeconds = 0;
-    userBreakSeconds = 0;
-    const inMenit = document.getElementById("inputMaxMenit");
-    const inTugas = document.getElementById("inputMaxTugas");
-    if (inMenit) inMenit.value = 0;
-    if (inTugas) inTugas.value = 0;
-    const nowD = new Date();
-    selectedFilterDate = `${nowD.getFullYear()}-${(nowD.getMonth() + 1).toString().padStart(2, "0")}-${nowD.getDate().toString().padStart(2, "0")}`;
-    setMode("focus");
-    loadStorageData();
+  const modalEl = document.getElementById("confirmResetModal");
+  if (modalEl) {
+    bootstrap.Modal.getOrCreateInstance(modalEl).show();
+  } else {
+    // fallback to open a simple confirm if modal missing
+    if (confirm("Apakah Anda yakin ingin reset semua data?")) {
+      localStorage.clear();
+      location.reload();
+    }
   }
 });
 
@@ -1201,8 +1270,8 @@ document.getElementById("confirmResetBtn")?.addEventListener("click", () => {
     const modal = bootstrap.Modal.getInstance(modalElement);
     if (modal) modal.hide();
   }
-  alert("✅ Semua data berhasil direset!");
-  location.reload();
+  showNotification("✅ Semua data berhasil direset!", "success", 1200);
+  setTimeout(() => location.reload(), 900);
 });
 
 document.getElementById("inputMaxMenit")?.addEventListener("input", (e) => {

@@ -345,6 +345,25 @@ session_start();
 </div>
 
 <!-- Modal Konfirmasi Reset (sub-modal) -->
+<!-- Modal Input Memo (ditampilkan saat sesi selesai) -->
+<div class="modal fade" id="memoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Catatan Sesi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p id="memoModalMsg" class="small text-muted">Sesi selesai. Tulis ringkasan singkat kegiatan Anda:</p>
+                <textarea id="memoInput" class="form-control" rows="3" placeholder="Tulis catatan singkat..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lewati</button>
+                <button type="button" class="btn btn-primary" id="memoSaveBtn">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="confirmResetModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
