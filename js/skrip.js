@@ -233,141 +233,206 @@ function drawDesertFrogEye(ecx, ecy, mx, my) {
 
 function drawCat(mx, my, cx, cy) {
   if (!petCtx) return;
-  // Badan Gembul
-  petCtx.fillStyle = "#222222";
+
+  // 1. Kaki Kecil di Bawah (Efek Perspektif dari Atas)
+  petCtx.fillStyle = "#8C6A5C";
+  // Kaki Kiri
   petCtx.beginPath();
-  petCtx.moveTo(cx - 80, cy + 130);
-  petCtx.quadraticCurveTo(cx - 90, cy + 30, cx - 50, cy + 10);
-  petCtx.lineTo(cx + 50, cy + 10);
-  petCtx.quadraticCurveTo(cx + 90, cy + 30, cx + 80, cy + 130);
+  petCtx.ellipse(cx - 25, cy + 120, 15, 10, 0, 0, Math.PI * 2);
+  petCtx.fill();
+  // Kaki Kanan
+  petCtx.beginPath();
+  petCtx.ellipse(cx + 25, cy + 120, 15, 10, 0, 0, Math.PI * 2);
+  petCtx.fill();
+  
+  // Detail Cakar Kaki
+  petCtx.strokeStyle = "#402E2B";
+  petCtx.lineWidth = 2;
+  for(let i = -1; i <= 1; i++) {
+    petCtx.beginPath(); petCtx.moveTo(cx - 25 + i*5, cy + 115); petCtx.lineTo(cx - 25 + i*5, cy + 128); petCtx.stroke();
+    petCtx.beginPath(); petCtx.moveTo(cx + 25 + i*5, cy + 115); petCtx.lineTo(cx + 25 + i*5, cy + 128); petCtx.stroke();
+  }
+
+  // 2. Badan Mengecil di Bawah Kepala
+  petCtx.fillStyle = "#A98473";
+  petCtx.beginPath();
+  petCtx.moveTo(cx - 40, cy + 30);
+  petCtx.quadraticCurveTo(cx - 45, cy + 90, cx - 25, cy + 120);
+  petCtx.lineTo(cx + 25, cy + 120);
+  petCtx.quadraticCurveTo(cx + 45, cy + 90, cx + 40, cy + 30);
   petCtx.closePath();
   petCtx.fill();
 
-  // Kepala Bulat
-  petCtx.fillStyle = "#151515";
+  // 3. Telinga Lebar & Tegak (Digambar di belakang kepala)
+  petCtx.fillStyle = "#8C6A5C";
+  // Telinga Kiri
   petCtx.beginPath();
-  petCtx.ellipse(cx, cy, 65, 55, 0, 0, Math.PI * 2);
+  petCtx.moveTo(cx - 75, cy - 10);
+  petCtx.lineTo(cx - 85, cy - 90);
+  petCtx.lineTo(cx - 25, cy - 45);
+  petCtx.closePath();
+  petCtx.fill();
+  // Bagian dalam telinga kiri
+  petCtx.fillStyle = "#B08A79";
+  petCtx.beginPath();
+  petCtx.moveTo(cx - 70, cy - 15);
+  petCtx.lineTo(cx - 78, cy - 80);
+  petCtx.lineTo(cx - 32, cy - 43);
+  petCtx.closePath();
   petCtx.fill();
 
-  // Telinga Kiri & Kanan
-  petCtx.fillStyle = "#151515";
+  // Telinga Kanan
+  petCtx.fillStyle = "#8C6A5C";
   petCtx.beginPath();
-  petCtx.moveTo(cx - 55, cy - 20);
-  petCtx.quadraticCurveTo(cx - 60, cy - 75, cx - 25, cy - 45);
+  petCtx.moveTo(cx + 75, cy - 10);
+  petCtx.lineTo(cx + 85, cy - 90);
+  petCtx.lineTo(cx + 25, cy - 45);
+  petCtx.closePath();
   petCtx.fill();
+  // Bagian dalam telinga kanan
+  petCtx.fillStyle = "#B08A79";
   petCtx.beginPath();
-  petCtx.moveTo(cx + 55, cy - 20);
-  petCtx.quadraticCurveTo(cx + 60, cy - 75, cx + 25, cy - 45);
+  petCtx.moveTo(cx + 70, cy - 15);
+  petCtx.lineTo(cx + 78, cy - 80);
+  petCtx.lineTo(cx + 32, cy - 43);
+  petCtx.closePath();
   petCtx.fill();
 
-  // Mata Hijau Kucing
-  drawCuteGreenEye(cx - 28, cy - 10, mx, my);
-  drawCuteGreenEye(cx + 28, cy - 10, mx, my);
+  // 4. Kepala Bulat Besar Melebar (Fisheye)
+  petCtx.fillStyle = "#A98473";
+  petCtx.beginPath();
+  petCtx.ellipse(cx, cy, 95, 80, 0, 0, Math.PI * 2);
+  petCtx.fill();
 
-  // Mulut 'w'
-  petCtx.strokeStyle = "#000000";
+  // 5. Corak Loreng (Stripes) di Jidat & Pipi
+  petCtx.fillStyle = "#362624";
+  
+  // Loreng Jidat Tengah
+  petCtx.beginPath();
+  petCtx.moveTo(cx - 5, cy - 75); petCtx.lineTo(cx, cy - 30); petCtx.lineTo(cx + 5, cy - 75); petCtx.fill();
+  petCtx.beginPath();
+  petCtx.moveTo(cx - 20, cy - 70); petCtx.quadraticCurveTo(cx - 10, cy - 45, cx - 12, cy - 35); petCtx.lineTo(cx - 22, cy - 65); petCtx.fill();
+  petCtx.beginPath();
+  petCtx.moveTo(cx + 20, cy - 70); petCtx.quadraticCurveTo(cx + 10, cy - 45, cx + 12, cy - 35); petCtx.lineTo(cx + 22, cy - 65); petCtx.fill();
+
+  // Loreng Pipi Kiri & Kanan
+  for(let i = 0; i < 3; i++) {
+    petCtx.beginPath();
+    petCtx.moveTo(cx - 90, cy - 10 + i*15);
+    petCtx.lineTo(cx - 50, cy + i*10);
+    petCtx.lineTo(cx - 85, cy + 5 + i*15);
+    petCtx.fill();
+
+    // Kanan
+    petCtx.beginPath();
+    petCtx.moveTo(cx + 90, cy - 10 + i*15);
+    petCtx.lineTo(cx + 50, cy + i*10);
+    petCtx.lineTo(cx + 85, cy + 5 + i*15);
+    petCtx.fill();
+  }
+
+  // 6. Mata Marah/Galak Warna Kuning Terang
+  drawAngryYellowEye(cx - 35, cy - 5, mx, my, true);
+  drawAngryYellowEye(cx + 35, cy - 5, mx, my, false);
+
+  // 7. Hidung Segitiga Pink Tua / Merah Gelap
+  petCtx.fillStyle = "#9C3D3D";
+  petCtx.beginPath();
+  petCtx.moveTo(cx - 8, cy + 22);
+  petCtx.lineTo(cx + 8, cy + 22);
+  petCtx.lineTo(cx, cy + 32);
+  petCtx.closePath();
+  petCtx.fill();
+
+  // Batang hidung atas (shadow)
+  petCtx.fillStyle = "#594036";
+  petCtx.beginPath();
+  petCtx.moveTo(cx - 8, cy + 22);
+  petCtx.lineTo(cx + 8, cy + 22);
+  petCtx.lineTo(cx + 4, cy + 5);
+  petCtx.lineTo(cx - 4, cy + 5);
+  petCtx.fill();
+
+  // 8. Mulut Serius (Garis Tipis ke Bawah)
+  petCtx.strokeStyle = "#2B1E1C";
   petCtx.lineWidth = 3;
   petCtx.lineCap = "round";
   petCtx.beginPath();
-  petCtx.arc(cx - 5, cy + 12, 5, 0.1, Math.PI - 0.3);
+  petCtx.moveTo(cx, cy + 32);
+  petCtx.lineTo(cx, cy + 40);
   petCtx.stroke();
+  
   petCtx.beginPath();
-  petCtx.arc(cx + 5, cy + 12, 5, 0.3, Math.PI - 0.1);
+  petCtx.moveTo(cx - 10, cy + 43);
+  petCtx.quadraticCurveTo(cx, cy + 38, cx + 10, cy + 43);
   petCtx.stroke();
 
-  // Syal Oranye-Pink
-  petCtx.save();
-  petCtx.translate(cx, cy + 45);
-  petCtx.fillStyle = "#E76F51";
-  petCtx.beginPath();
-  petCtx.ellipse(0, 0, 70, 18, 0, 0, Math.PI * 2);
-  petCtx.fill();
-
-  petCtx.lineWidth = 10;
-  petCtx.strokeStyle = "#F4A261";
-  for (let i = -60; i <= 60; i += 25) {
+  // 9. Kumis Putih yang Panjang & Tegas
+  petCtx.strokeStyle = "#FFFFFF";
+  petCtx.lineWidth = 2.5;
+  // Kumis Kiri
+  for(let i = 0; i < 3; i++) {
     petCtx.beginPath();
-    petCtx.moveTo(i, -12);
-    petCtx.lineTo(i - 5, 12);
+    petCtx.moveTo(cx - 40, cy + 30 + i*3);
+    petCtx.lineTo(cx - 140, cy + 20 + i*20);
     petCtx.stroke();
   }
-
-  // Buntut Syal
-  petCtx.fillStyle = "#E76F51";
-  petCtx.beginPath();
-  petCtx.moveTo(20, 5);
-  petCtx.lineTo(55, 10);
-  petCtx.lineTo(45, 60);
-  petCtx.lineTo(10, 55);
-  petCtx.closePath();
-  petCtx.fill();
-  petCtx.fillStyle = "#F4A261";
-  petCtx.fillRect(14, 20, 35, 8);
-  petCtx.fillRect(11, 38, 33, 8);
-
-  // Rumbai Syal
-  petCtx.strokeStyle = "#E76F51";
-  petCtx.lineWidth = 3;
-  for (let i = 0; i < 5; i++) {
+  // Kumis Kanan
+  for(let i = 0; i < 3; i++) {
     petCtx.beginPath();
-    petCtx.moveTo(13 + i * 7, 55);
-    petCtx.lineTo(11 + i * 7, 75);
+    petCtx.moveTo(cx + 40, cy + 30 + i*3);
+    petCtx.lineTo(cx + 140, cy + 20 + i*20);
     petCtx.stroke();
   }
-  petCtx.restore();
-
-  // Bunga Matahari di Kepala
-  petCtx.save();
-  petCtx.translate(cx - 15, cy - 50);
-  petCtx.strokeStyle = "#4A7C59";
-  petCtx.lineWidth = 2;
-  petCtx.beginPath();
-  petCtx.moveTo(0, 0);
-  petCtx.quadraticCurveTo(-10, -25, -5, -50);
-  petCtx.stroke();
-
-  petCtx.fillStyle = "#E9C46A";
-  for (let i = 0; i < 8; i++) {
-    petCtx.beginPath();
-    petCtx.arc(
-      -5 + Math.cos((i * Math.PI) / 4) * 12,
-      -50 + Math.sin((i * Math.PI) / 4) * 12,
-      5,
-      0,
-      Math.PI * 2,
-    );
-    petCtx.fill();
-  }
-  petCtx.fillStyle = "#A2612D";
-  petCtx.beginPath();
-  petCtx.arc(-5, -50, 6, 0, Math.PI * 2);
-  petCtx.fill();
-  petCtx.restore();
 }
 
-function drawCuteGreenEye(ecx, ecy, mx, my) {
+// Fungsi Baru untuk Menggambar Mata Kuning yang Galak/Tajam
+function drawAngryYellowEye(ecx, ecy, mx, my, isLeft) {
   if (!petCtx) return;
-  petCtx.fillStyle = "#A8DADC";
+
+  petCtx.save();
+  // Kemiringan kelopak mata agar tetap terlihat intens/galak
+  petCtx.translate(ecx, ecy);
+  petCtx.rotate(isLeft ? 0.15 : -0.15);
+
+  // Sclera/Mata Kuning Cerah
+  petCtx.fillStyle = "#D6E61C"; 
   petCtx.beginPath();
-  petCtx.arc(ecx, ecy, 14, 0, Math.PI * 2);
+  petCtx.ellipse(0, 0, 24, 15, 0, 0, Math.PI * 2);
   petCtx.fill();
 
+  // Efek Kelopak Mata Atas Hitam (Mata melotot tajam)
+  petCtx.fillStyle = "#261917";
+  petCtx.beginPath();
+  petCtx.ellipse(0, -6, 26, 12, 0, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // Mengembalikan area kuning secara proporsional
+  petCtx.fillStyle = "#D6E61C";
+  petCtx.beginPath();
+  petCtx.ellipse(0, 4, 22, 10, 0, 0, Math.PI * 2);
+  petCtx.fill();
+
+  // Perhitungan Interaktivitas Pergerakan Pupil
   let angle = Math.atan2(my - ecy, mx - ecx);
-  let dist = Math.min(
-    Math.sqrt(Math.pow(mx - ecx, 2) + Math.pow(my - ecy, 2)),
-    3,
-  );
-  let pupilX = ecx + Math.cos(angle) * dist;
-  let pupilY = ecy + Math.sin(angle) * dist;
+  let dist = Math.min(Math.sqrt(Math.pow(mx - ecx, 2) + Math.pow(my - ecy, 2)), 3); // Jarak gerak dikurangi sedikit agar pupil besar tidak keluar jalur
+  let pupilX = Math.cos(angle) * dist;
+  let pupilY = Math.sin(angle) * dist + 1;
 
-  petCtx.fillStyle = "#1D3557";
+  // ===== PERUBAHAN DI SINI: Pupil Dibuat Besar & Bulat =====
+  petCtx.fillStyle = "#0D0D0D";
   petCtx.beginPath();
-  petCtx.ellipse(pupilX, pupilY, 5, 9, 0, 0, Math.PI * 2);
+  // Mengubah radius X dan Y menjadi hampir sama besar (11 dan 12) agar pupil melebar bulat seperti di gambar
+  petCtx.ellipse(pupilX, pupilY, 11, 12, 0, 0, Math.PI * 2);
   petCtx.fill();
+
+  // Sorot Lampu / Glare Putih (Sedikit digeser ke atas agar terlihat hidup)
   petCtx.fillStyle = "#FFFFFF";
   petCtx.beginPath();
-  petCtx.arc(pupilX - 3, pupilY - 4, 3, 0, Math.PI * 2);
+  petCtx.arc(pupilX - 3, pupilY - 4, 2.5, 0, Math.PI * 2);
   petCtx.fill();
+
+  petCtx.restore();
 }
 
 // Fungsi Gambar Anjing Mengintip (Fokus Utama pada Pilihan Anjing)
