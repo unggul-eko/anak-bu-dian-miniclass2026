@@ -272,13 +272,19 @@ function drawCat(mx, my, cx, cy) {
   petCtx.beginPath();
   petCtx.ellipse(cx + 25, cy + 120, 15, 10, 0, 0, Math.PI * 2);
   petCtx.fill();
-  
+
   // Detail Cakar Kaki
   petCtx.strokeStyle = "#402E2B";
   petCtx.lineWidth = 2;
-  for(let i = -1; i <= 1; i++) {
-    petCtx.beginPath(); petCtx.moveTo(cx - 25 + i*5, cy + 115); petCtx.lineTo(cx - 25 + i*5, cy + 128); petCtx.stroke();
-    petCtx.beginPath(); petCtx.moveTo(cx + 25 + i*5, cy + 115); petCtx.lineTo(cx + 25 + i*5, cy + 128); petCtx.stroke();
+  for (let i = -1; i <= 1; i++) {
+    petCtx.beginPath();
+    petCtx.moveTo(cx - 25 + i * 5, cy + 115);
+    petCtx.lineTo(cx - 25 + i * 5, cy + 128);
+    petCtx.stroke();
+    petCtx.beginPath();
+    petCtx.moveTo(cx + 25 + i * 5, cy + 115);
+    petCtx.lineTo(cx + 25 + i * 5, cy + 128);
+    petCtx.stroke();
   }
 
   // 2. Badan Mengecil di Bawah Kepala
@@ -334,28 +340,37 @@ function drawCat(mx, my, cx, cy) {
 
   // 5. Corak Loreng (Stripes) di Jidat & Pipi
   petCtx.fillStyle = "#362624";
-  
+
   // Loreng Jidat Tengah
   petCtx.beginPath();
-  petCtx.moveTo(cx - 5, cy - 75); petCtx.lineTo(cx, cy - 30); petCtx.lineTo(cx + 5, cy - 75); petCtx.fill();
+  petCtx.moveTo(cx - 5, cy - 75);
+  petCtx.lineTo(cx, cy - 30);
+  petCtx.lineTo(cx + 5, cy - 75);
+  petCtx.fill();
   petCtx.beginPath();
-  petCtx.moveTo(cx - 20, cy - 70); petCtx.quadraticCurveTo(cx - 10, cy - 45, cx - 12, cy - 35); petCtx.lineTo(cx - 22, cy - 65); petCtx.fill();
+  petCtx.moveTo(cx - 20, cy - 70);
+  petCtx.quadraticCurveTo(cx - 10, cy - 45, cx - 12, cy - 35);
+  petCtx.lineTo(cx - 22, cy - 65);
+  petCtx.fill();
   petCtx.beginPath();
-  petCtx.moveTo(cx + 20, cy - 70); petCtx.quadraticCurveTo(cx + 10, cy - 45, cx + 12, cy - 35); petCtx.lineTo(cx + 22, cy - 65); petCtx.fill();
+  petCtx.moveTo(cx + 20, cy - 70);
+  petCtx.quadraticCurveTo(cx + 10, cy - 45, cx + 12, cy - 35);
+  petCtx.lineTo(cx + 22, cy - 65);
+  petCtx.fill();
 
   // Loreng Pipi Kiri & Kanan
-  for(let i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     petCtx.beginPath();
-    petCtx.moveTo(cx - 90, cy - 10 + i*15);
-    petCtx.lineTo(cx - 50, cy + i*10);
-    petCtx.lineTo(cx - 85, cy + 5 + i*15);
+    petCtx.moveTo(cx - 90, cy - 10 + i * 15);
+    petCtx.lineTo(cx - 50, cy + i * 10);
+    petCtx.lineTo(cx - 85, cy + 5 + i * 15);
     petCtx.fill();
 
     // Kanan
     petCtx.beginPath();
-    petCtx.moveTo(cx + 90, cy - 10 + i*15);
-    petCtx.lineTo(cx + 50, cy + i*10);
-    petCtx.lineTo(cx + 85, cy + 5 + i*15);
+    petCtx.moveTo(cx + 90, cy - 10 + i * 15);
+    petCtx.lineTo(cx + 50, cy + i * 10);
+    petCtx.lineTo(cx + 85, cy + 5 + i * 15);
     petCtx.fill();
   }
 
@@ -389,7 +404,7 @@ function drawCat(mx, my, cx, cy) {
   petCtx.moveTo(cx, cy + 32);
   petCtx.lineTo(cx, cy + 40);
   petCtx.stroke();
-  
+
   petCtx.beginPath();
   petCtx.moveTo(cx - 10, cy + 43);
   petCtx.quadraticCurveTo(cx, cy + 38, cx + 10, cy + 43);
@@ -399,17 +414,17 @@ function drawCat(mx, my, cx, cy) {
   petCtx.strokeStyle = "#FFFFFF";
   petCtx.lineWidth = 2.5;
   // Kumis Kiri
-  for(let i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     petCtx.beginPath();
-    petCtx.moveTo(cx - 40, cy + 30 + i*3);
-    petCtx.lineTo(cx - 140, cy + 20 + i*20);
+    petCtx.moveTo(cx - 40, cy + 30 + i * 3);
+    petCtx.lineTo(cx - 140, cy + 20 + i * 20);
     petCtx.stroke();
   }
   // Kumis Kanan
-  for(let i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     petCtx.beginPath();
-    petCtx.moveTo(cx + 40, cy + 30 + i*3);
-    petCtx.lineTo(cx + 140, cy + 20 + i*20);
+    petCtx.moveTo(cx + 40, cy + 30 + i * 3);
+    petCtx.lineTo(cx + 140, cy + 20 + i * 20);
     petCtx.stroke();
   }
 }
@@ -424,7 +439,7 @@ function drawAngryYellowEye(ecx, ecy, mx, my, isLeft) {
   petCtx.rotate(isLeft ? 0.15 : -0.15);
 
   // Sclera/Mata Kuning Cerah
-  petCtx.fillStyle = "#D6E61C"; 
+  petCtx.fillStyle = "#D6E61C";
   petCtx.beginPath();
   petCtx.ellipse(0, 0, 24, 15, 0, 0, Math.PI * 2);
   petCtx.fill();
@@ -443,7 +458,10 @@ function drawAngryYellowEye(ecx, ecy, mx, my, isLeft) {
 
   // Perhitungan Interaktivitas Pergerakan Pupil
   let angle = Math.atan2(my - ecy, mx - ecx);
-  let dist = Math.min(Math.sqrt(Math.pow(mx - ecx, 2) + Math.pow(my - ecy, 2)), 3); // Jarak gerak dikurangi sedikit agar pupil besar tidak keluar jalur
+  let dist = Math.min(
+    Math.sqrt(Math.pow(mx - ecx, 2) + Math.pow(my - ecy, 2)),
+    3,
+  ); // Jarak gerak dikurangi sedikit agar pupil besar tidak keluar jalur
   let pupilX = Math.cos(angle) * dist;
   let pupilY = Math.sin(angle) * dist + 1;
 
@@ -957,9 +975,9 @@ function updateStatsUI() {
   let todayStr = `${nowObj.getFullYear()}-${(nowObj.getMonth() + 1).toString().padStart(2, "0")}-${nowObj.getDate().toString().padStart(2, "0")}`;
   let todayTasks = tasks.filter((t) => t.date === todayStr);
   let todayTasksCompletedCount = todayTasks.filter((t) => t.completed).length;
-  let otherTasksCount = tasks.filter((t) => t.date !== todayStr).length;
+  let allTasksCount = tasks.length;
   let targetTugasHariIni = stats.customMaxTugas || 0;
-  let totalAkumulatifTargetSemua = targetTugasHariIni + otherTasksCount;
+  let totalAkumulatifTargetSemua = targetTugasHariIni + allTasksCount;
   let totalSeluruhTugasSelesai = tasks.filter((t) => t.completed).length;
 
   const bindings = {
