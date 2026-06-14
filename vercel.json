@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "**/*.html", "use": "@vercel/static" },
+    {
+      "src": "**/*.{css,js,ico,png,jpg,jpeg,svg,webp}",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    { "src": "/$", "dest": "/index.html" },
+    { "src": "/page/utama.php", "dest": "/page/utama.html" },
+    { "src": "/page/statistik.php", "dest": "/page/statistik.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
