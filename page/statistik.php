@@ -120,11 +120,8 @@
         </div>
     </div>
 
-    <!-- Tombol reset data (opsional) -->
+    <!-- Pengingat -->
     <div class="text-center mt-5">
-        <button id="resetStatsBtn" class="btn btn-outline-danger rounded-pill px-4">
-            <i class="bi bi-arrow-repeat"></i> Reset Semua Statistik
-        </button>
         <p class="text-muted small mt-2">Data disimpan di browser Anda (localStorage)</p>
     </div>
 </div>
