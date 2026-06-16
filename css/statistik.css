@@ -85,19 +85,19 @@ hr {
   padding: 0.4rem 0;
   border-bottom: 1px solid #cfe2cf;
   font-size: 0.9rem;
+  flex-wrap: wrap; /* agar turun ke baris baru di layar kecil */
 }
-.todo-item-summary.completed span {
-  text-decoration: line-through;
-  color: #8fa48f;
+.todo-item-summary .ms-auto {
+  margin-left: auto;
 }
-@media (max-width: 768px) {
-  .stat-value {
-    font-size: 2rem;
+@media (max-width: 576px) {
+  .todo-item-summary {
+    flex-wrap: wrap;
   }
-  .stat-icon {
-    width: 55px;
-    height: 55px;
-    font-size: 2rem;
+  .todo-item-summary .ms-auto {
+    margin-left: 0;
+    width: 100%;
+    text-align: right;
   }
 }
 .logo-img-stat {

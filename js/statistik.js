@@ -54,9 +54,22 @@ function renderTaskSummary() {
   tasks.forEach((task) => {
     const div = document.createElement("div");
     div.className = `todo-item-summary ${task.completed ? "completed" : ""}`;
+    
+    // Format tanggal agar lebih rapi (contoh: 2026-06-16 -> 16/06/2026)
+    let dateDisplay = "";
+    if (task.date) {
+      const parts = task.date.split("-");
+      if (parts.length === 3) {
+        dateDisplay = `${parts[2]}/${parts[1]}/${parts[0]}`; // dd/mm/yyyy
+      } else {
+        dateDisplay = task.date;
+      }
+    }
+    
     div.innerHTML = `
       <i class="bi ${task.completed ? "bi-check-circle-fill text-success" : "bi-circle text-secondary"}"></i>
       <span>${task.text}</span>
+      <span class="text-muted small ms-auto">${dateDisplay}</span>
     `;
     container.appendChild(div);
   });
@@ -116,7 +129,7 @@ function renderTasksProgressChart() {
         {
           label: "Persentase (%)",
           data: [Math.min(100, percent)],
-          backgroundColor: ["#2196f3"],
+          backgroundColor: ["#2e7d32"],
           borderRadius: 8,
           barPercentage: 0.5,
         },
