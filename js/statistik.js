@@ -1,7 +1,9 @@
 let compositionChart = null;
 let tasksProgressChart = null;
 
+// ==========================================
 // Mengambil data statistik dari localStorage (format utama.php)
+// ==========================================
 function getStats() {
   const defaultStats = {
     activeBreakCompleted: 0,
@@ -11,6 +13,7 @@ function getStats() {
     totalFocusSessionsToday: 0,
     memos: [],
   };
+  
   let stored = localStorage.getItem("pomostep_stats");
   if (stored) {
     try {
@@ -32,39 +35,47 @@ function getTasks() {
     try {
       return JSON.parse(stored);
     } catch (e) {
-      return [];  // jika rusuk, kembalikan kosong
+      return []; // jika rusak, kembalikan kosong
     }
   }
-  return [];  // tidak ada data -> kosong, bukan default buatan
+  return []; // tidak ada data -> kosong, bukan default buatan
 }
 
+// ==========================================
 // Render daftar tugas di ringkasan
+// ==========================================
 function renderTaskSummary() {
   const tasks = getTasks();
   const container = document.getElementById("todoListSummary");
   if (!container) return;
+  
   container.innerHTML = "";
+  
   tasks.forEach((task) => {
     const div = document.createElement("div");
     div.className = `todo-item-summary ${task.completed ? "completed" : ""}`;
     div.innerHTML = `
-            <i class="bi ${task.completed ? "bi-check-circle-fill text-success" : "bi-circle text-secondary"}"></i>
-            <span>${task.text}</span>
-        `;
+      <i class="bi ${task.completed ? "bi-check-circle-fill text-success" : "bi-circle text-secondary"}"></i>
+      <span>${task.text}</span>
+    `;
     container.appendChild(div);
   });
+  
   const completed = tasks.filter((t) => t.completed).length;
   document.getElementById("completedTasksCount").innerText = completed;
   document.getElementById("totalTasksCount").innerText = tasks.length;
+  
   let percent = tasks.length ? (completed / tasks.length) * 100 : 0;
-  document.getElementById("tasksProgressBar").style.width =
-    Math.min(100, percent) + "%";
+  document.getElementById("tasksProgressBar").style.width = Math.min(100, percent) + "%";
 }
 
+// ==========================================
 // Render chart donut: Sesi Fokus Hari Ini vs Total Break
+// ==========================================
 function renderCompositionChart(stats) {
   const ctx = document.getElementById("compositionChart").getContext("2d");
   if (compositionChart) compositionChart.destroy();
+  
   compositionChart = new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -86,13 +97,17 @@ function renderCompositionChart(stats) {
   });
 }
 
+// ==========================================
 // Render chart bar: Progress Tugas
+// ==========================================
 function renderTasksProgressChart() {
   const tasks = getTasks();
   const completed = tasks.filter((t) => t.completed).length;
   const percent = tasks.length ? (completed / tasks.length) * 100 : 0;
   const ctx = document.getElementById("tasksProgressChart").getContext("2d");
+  
   if (tasksProgressChart) tasksProgressChart.destroy();
+  
   tasksProgressChart = new Chart(ctx, {
     type: "bar",
     data: {
@@ -118,54 +133,55 @@ function renderTasksProgressChart() {
   });
 }
 
+// ==========================================
 // Update semua UI statistik
+// ==========================================
 function updateStatisticsUI() {
   const stats = getStats();
-  const tasks = getTasks();
-  document.getElementById("totalSesiHariIni").innerText =
-    stats.totalFocusSessionsToday;
-  document.getElementById("totalActiveBreak").innerText =
-    stats.activeBreakCompleted;
-  document.getElementById("totalFocusMinutes").innerText =
-    stats.focusMinutesTotal;
+  
+  document.getElementById("totalSesiHariIni").innerText = stats.totalFocusSessionsToday;
+  document.getElementById("totalActiveBreak").innerText = stats.activeBreakCompleted;
+  document.getElementById("totalFocusMinutes").innerText = stats.focusMinutesTotal;
   document.getElementById("weeklyStreak").innerText = stats.weeklyStreak;
-  document.getElementById("totalFocusSessionsCount").innerText =
-    stats.totalFocusSessionsToday;
-  let avg = stats.totalFocusSessionsToday
-    ? Math.round(stats.focusMinutesTotal / stats.totalFocusSessionsToday)
+  document.getElementById("totalFocusSessionsCount").innerText = stats.totalFocusSessionsToday;
+  
+  let avg = stats.totalFocusSessionsToday 
+    ? Math.round(stats.focusMinutesTotal / stats.totalFocusSessionsToday) 
     : 0;
   document.getElementById("avgMinutesPerSession").innerText = avg;
+  
   renderTaskSummary();
   renderCompositionChart(stats);
   renderTasksProgressChart();
 }
 
-// Reset semua data
+// ==========================================
+// Reset semua data (Menggunakan Bootstrap Modal)
+// ==========================================
 function resetAllStats() {
-  // Create a confirmation modal dynamically (non-blocking)
-  let confirmModal = document.getElementById("statResetConfirmModal");
+  const confirmModal = document.getElementById("confirmModal"); // Pastikan ID ini ada di HTML Anda
+  
+  // Fallback jika elemen modal tidak ditemukan (gunakan confirm bawaan browser)
   if (!confirmModal) {
-    const wrap = document.createElement("div");
-    wrap.innerHTML = `
-        <div class="modal fade" id="statResetConfirmModal" tabindex="-1">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header bg-danger text-white"><h5 class="modal-title">Konfirmasi Reset Statistik</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
-              <div class="modal-body">⚠️ Yakin ingin mereset semua statistik? Data tidak dapat dikembalikan.</div>
-              <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button><button type="button" class="btn btn-danger" id="statConfirmResetBtn">Ya, Reset</button></div>
-            </div>
-          </div>
-        </div>`;
-    document.body.appendChild(wrap);
-    confirmModal = document.getElementById("statResetConfirmModal");
+    if (confirm("Yakin ingin mereset SEMUA data? Tindakan permanen.")) {
+      localStorage.removeItem("pomostep_stats");
+      localStorage.removeItem("pomostep_tasks");
+      localStorage.removeItem("pomostep_timer");
+      updateStatisticsUI();
+      location.reload();
+    }
+    return;
   }
 
+  // Jika modal Bootstrap ditemukan
   const modalInstance = new bootstrap.Modal(confirmModal);
   modalInstance.show();
 
   const doReset = () => {
     localStorage.removeItem("pomostep_stats");
     localStorage.removeItem("pomostep_tasks");
+    localStorage.removeItem("pomostep_timer");
+    
     const defaultStats = {
       activeBreakCompleted: 0,
       focusMinutesTotal: 0,
@@ -175,14 +191,17 @@ function resetAllStats() {
       memos: [],
     };
     localStorage.setItem("pomostep_stats", JSON.stringify(defaultStats));
+    
     const defaultTasks = [
       { text: "Implement auth module", completed: false },
       { text: "Tulis laporan praktikum", completed: false },
       { text: "Review PR teman", completed: false },
     ];
     localStorage.setItem("pomostep_tasks", JSON.stringify(defaultTasks));
+    
     updateStatisticsUI();
-    // non-blocking notification
+    
+    // Non-blocking notification
     const notify = document.createElement("div");
     notify.className = "alert alert-success shadow-sm";
     notify.style.position = "fixed";
@@ -191,23 +210,30 @@ function resetAllStats() {
     notify.style.zIndex = "10800";
     notify.innerText = "Semua statistik telah direset.";
     document.body.appendChild(notify);
+    
     setTimeout(() => {
       notify.remove();
     }, 2000);
   };
 
-  document.getElementById("statConfirmResetBtn")?.addEventListener(
-    "click",
-    () => {
+  // Hapus listener lama jika ada agar tidak double-trigger, lalu tambahkan yang baru
+  const resetBtn = document.getElementById("statConfirmResetBtn");
+  if (resetBtn) {
+    // Clone node untuk mereset event listener lama secara instan (jika ada)
+    const newBtn = resetBtn.cloneNode(true);
+    resetBtn.parentNode.replaceChild(newBtn, resetBtn);
+    
+    newBtn.addEventListener("click", () => {
       doReset();
       const mi = bootstrap.Modal.getInstance(confirmModal);
       if (mi) mi.hide();
-    },
-    { once: true },
-  );
+    }, { once: true });
+  }
 }
 
-// Inisialisasi
+// ==========================================
+// Inisialisasi Event Listener
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
   updateStatisticsUI();
   const resetBtn = document.getElementById("resetStatsBtn");

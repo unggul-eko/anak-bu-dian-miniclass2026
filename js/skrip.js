@@ -31,6 +31,30 @@ const todayObj = new Date();
 let selectedFilterDate = `${todayObj.getFullYear()}-${(todayObj.getMonth() + 1).toString().padStart(2, "0")}-${todayObj.getDate().toString().padStart(2, "0")}`;
 
 // ==========================================
+// PERSISTENSI STATE TIMER
+// ==========================================
+function saveTimerState() {
+  const state = {
+    isRunning: isRunning,
+    isPaused: isPaused,
+    currentSeconds: currentSeconds,
+    totalDurationInMode: totalDurationInMode,
+    currentMode: currentMode,
+    startTime: isRunning ? Date.now() : null,
+    lastUpdate: Date.now()
+  };
+  localStorage.setItem("pomostep_timer", JSON.stringify(state));
+}
+function loadTimerState() {
+  const saved = localStorage.getItem("pomostep_timer");
+  if (!saved) return null;
+  try { return JSON.parse(saved); } catch { return null; }
+}
+function clearTimerState() {
+  localStorage.removeItem("pomostep_timer");
+}
+
+// ==========================================
 // Lightweight non-blocking notification (top-right)
 function showNotification(message, type = "success", timeout = 2500) {
   let container = document.getElementById("globalNotificationBanner");
@@ -1151,12 +1175,8 @@ function stopTimer() {
 
 function startTimer() {
   const activeHour = document.querySelector("#wheelHours .wheel-item.selected");
-  const activeMin = document.querySelector(
-    "#wheelMinutes .wheel-item.selected",
-  );
-  const activeSec = document.querySelector(
-    "#wheelSeconds .wheel-item.selected",
-  );
+  const activeMin = document.querySelector("#wheelMinutes .wheel-item.selected");
+  const activeSec = document.querySelector("#wheelSeconds .wheel-item.selected");
   let totalRoda = 0;
   if (activeHour && activeMin && activeSec) {
     totalRoda =
@@ -1177,6 +1197,8 @@ function startTimer() {
       setWheelActiveValue("wheelMinutes", 25);
     }
   }
+
+  
   updateTimerDisplay();
   if (isRunning) return;
   if (!isPaused) {
@@ -1188,39 +1210,45 @@ function startTimer() {
   isPaused = false;
   document.getElementById("globalWheelWrapper")?.classList.add("locked");
   setButtonVisualState("start");
+  saveTimerState();
+  startTimerInterval(); // <-- panggil fungsi global
+}
 
+function startTimerInterval() {
+  if (timerInterval) clearInterval(timerInterval);
   timerInterval = setInterval(() => {
     if (currentSeconds <= 0) {
       clearInterval(timerInterval);
       timerInterval = null;
-      isRunning = false;
-      isPaused = false;
-      document.getElementById("globalWheelWrapper")?.classList.remove("locked");
-      setButtonVisualState("reset");
-      playBuzzerNotification();
-
-      if (currentMode === "focus") {
-        stats.focusMinutesTotal += Math.max(
-          1,
-          Math.round(totalDurationInMode / 60),
-        );
-        stats.totalFocusSessionsToday += 1;
-        triggerStreakIncrement();
-        saveData();
-        // Tampilkan modal memo (tanpa alert)
-        createFocusMemo();
-        setMode("break");
-      } else {
-        stats.activeBreakCompleted += 1;
-        saveData();
-        // Break selesai — lanjutkan ke fokus tanpa alert
-        setMode("focus");
-      }
+      finishTimer();
       return;
     }
     currentSeconds--;
     updateTimerDisplay();
+    saveTimerState();
   }, 1000);
+}
+
+function finishTimer() {
+ isRunning = false;
+  isPaused = false;
+  document.getElementById("globalWheelWrapper")?.classList.remove("locked");
+  setButtonVisualState("reset");
+  clearTimerState();
+  playBuzzerNotification();
+
+  if (currentMode === "focus") {
+    stats.focusMinutesTotal += Math.max(1, Math.round(totalDurationInMode / 60));
+    stats.totalFocusSessionsToday += 1;
+    triggerStreakIncrement();
+    saveData();
+    createFocusMemo();
+    setMode("break");
+  } else {
+    stats.activeBreakCompleted += 1;
+    saveData();
+    setMode("focus");
+  }
 }
 
 function setMode(mode) {
@@ -1441,5 +1469,43 @@ document.body.style.cursor = `url("${animalCursors["frog"]}") 4 4, auto`;
 build3DWheelPicker();
 loadStorageData();
 verifyStreakLogic();
-setMode("focus");
+
+const timerState = loadTimerState();
+if (timerState) {
+  currentSeconds = timerState.currentSeconds;
+  totalDurationInMode = timerState.totalDurationInMode;
+  currentMode = timerState.currentMode;
+  isRunning = timerState.isRunning;
+  isPaused = timerState.isPaused;
+
+  if (isRunning) {
+    const elapsed = (Date.now() - timerState.startTime) / 1000;
+    let remaining = currentSeconds - elapsed;
+    if (remaining <= 0) {
+      finishTimer();
+    } else {
+      currentSeconds = Math.floor(remaining);
+      updateTimerDisplay();
+      document.getElementById("timerModeText").innerText = currentMode === "focus" ? "Fokus Dimulai" : "Waktunya Istirahat";
+      document.getElementById("timerModeText").className = currentMode === "focus" ? "small fw-bold text-uppercase text-success" : "small fw-bold text-uppercase text-warning";
+      document.getElementById("focusModeBtn")?.classList.toggle("active", currentMode === "focus");
+      document.getElementById("breakModeBtn")?.classList.toggle("active", currentMode === "break");
+      document.getElementById("globalWheelWrapper")?.classList.add("locked");
+      setButtonVisualState("start");
+      startTimerInterval();
+    }
+  } else if (isPaused) {
+    updateTimerDisplay();
+    document.getElementById("timerModeText").innerText = currentMode === "focus" ? "Fokus Dimulai" : "Waktunya Istirahat";
+    document.getElementById("timerModeText").className = currentMode === "focus" ? "small fw-bold text-uppercase text-success" : "small fw-bold text-uppercase text-warning";
+    document.getElementById("focusModeBtn")?.classList.toggle("active", currentMode === "focus");
+    document.getElementById("breakModeBtn")?.classList.toggle("active", currentMode === "break");
+    document.getElementById("globalWheelWrapper")?.classList.add("locked");
+    setButtonVisualState("pause");
+  } else {
+    setMode(currentMode);
+  }
+} else {
+  setMode("focus");
+}
 drawPet();
