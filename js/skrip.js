@@ -976,6 +976,7 @@ function updateStatsUI() {
   let todayTasks = tasks.filter((t) => t.date === todayStr);
   let todayTasksCompletedCount = todayTasks.filter((t) => t.completed).length;
   let allTasksCount = tasks.length;
+  let totalTugasHariIni = todayTasks.length; 
   let targetTugasHariIni = stats.customMaxTugas || 0;
   let totalAkumulatifTargetSemua = targetTugasHariIni + allTasksCount;
   let totalSeluruhTugasSelesai = tasks.filter((t) => t.completed).length;
@@ -987,7 +988,7 @@ function updateStatsUI() {
     dashWeeklyStreak: stats.weeklyStreak,
     dashTotalSessionsToday: stats.totalFocusSessionsToday,
     targetTugasSelesai: todayTasksCompletedCount,
-    targetTugasHariIniTotal: targetTugasHariIni,
+    targetTugasHariIniTotal: totalTugasHariIni, 
     totalTugasSelesaiKeseluruhan: totalSeluruhTugasSelesai,
     totalTugasKeseluruhanSemua: totalAkumulatifTargetSemua,
     capaianTotalSesi: stats.totalFocusSessionsToday,

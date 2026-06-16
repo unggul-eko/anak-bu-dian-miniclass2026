@@ -23,22 +23,19 @@ function getStats() {
   return defaultStats;
 }
 
-// Mengambil daftar tugas dari localStorage
+// ==========================================
+// Mengambil daftar tugas dari localStorage (sinkron dengan skrip.js)
+// ==========================================
 function getTasks() {
-  let defaultTasks = [
-    { text: "Implement auth module", completed: false },
-    { text: "Tulis laporan praktikum", completed: false },
-    { text: "Review PR teman", completed: false },
-  ];
   let stored = localStorage.getItem("pomostep_tasks");
   if (stored) {
     try {
       return JSON.parse(stored);
     } catch (e) {
-      return defaultTasks;
+      return [];  // jika rusuk, kembalikan kosong
     }
   }
-  return defaultTasks;
+  return [];  // tidak ada data -> kosong, bukan default buatan
 }
 
 // Render daftar tugas di ringkasan
