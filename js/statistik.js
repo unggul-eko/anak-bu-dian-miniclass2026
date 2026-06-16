@@ -259,3 +259,33 @@ window.addEventListener("storage", (event) => {
     updateStatisticsUI();
   }
 });
+
+//Dark Mode Toggle
+document.addEventListener("DOMContentLoaded", () => {
+  updateStatisticsUI();
+  const resetBtn = document.getElementById("resetStatsBtn");
+  if (resetBtn) resetBtn.addEventListener("click", resetAllStats);
+
+  // Dark Mode Toggle (sama seperti di utama)
+  const darkModeToggle = document.getElementById("darkModeToggle");
+  const htmlElement = document.documentElement;
+  const currentTheme = localStorage.getItem("theme");
+  if (currentTheme === "dark") {
+    htmlElement.setAttribute("data-bs-theme", "dark");
+    document.body.classList.add("dark-mode");
+    if (darkModeToggle) darkModeToggle.checked = true;
+  }
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener("change", (e) => {
+      if (e.target.checked) {
+        htmlElement.setAttribute("data-bs-theme", "dark");
+        document.body.classList.add("dark-mode");
+        localStorage.setItem("theme", "dark");
+      } else {
+        htmlElement.setAttribute("data-bs-theme", "light");
+        document.body.classList.remove("dark-mode");
+        localStorage.setItem("theme", "light");
+      }
+    });
+  }
+});
